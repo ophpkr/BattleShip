@@ -1,4 +1,4 @@
-package game
+/*package game
 
 /** The grid containing a player ships' placements and oponent's hits
   *
@@ -6,18 +6,10 @@ package game
   *  @param name The grid's name
   *  @param size The grid's size (in number of squares for a side)
   */
-class GridOfShips(name: String, size: Int) extends Grid(name, size) {
-  /*private val _name = name
-  private val _size = size
-  private var _verticalLadder =
-  [] //TODO: initialize with code
-  private var _horizontalLadder =
-  [] //TODO: initialize with code
-  private var _representation =
-  [] //TODO: initialize with code */
+class GridOfShips(gName: String, gSize: Int) extends Grid(gName, gSize) {
 
   /* Particular functions */
-  /** Tell if a ship can occupied the squares given in parameter
+  /** Tell if a ship can occupy the squares given in parameter
     * @param squares Squares we want to know if they are free and exist in the grid
     * @return Returns true if the squares are free and in the grid else false
     */
@@ -35,5 +27,6 @@ class GridOfShips(name: String, size: Int) extends Grid(name, size) {
     *         "hit" if a ship has been hit for the first time on the given square,
     *         "sunk" if a ship has been hit for the first time on the given square and this hit makes it sunk
     */
-  def getState(square: String): String = ???
-}
+  def getStateAfterHit(square: String): String = ???
+
+}*/
