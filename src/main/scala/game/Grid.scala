@@ -22,22 +22,34 @@ abstract class Grid(gridName: String, gridSize: Int) {
 
 
   def representation = _representation
- /* def representation_(square: String, symbole: String): Unit = ???
+  def representation_(square: String, symbol: String): Unit = {
+    val pos = GridHelper.squareToArrayPositions(square)
+    _representation(pos(0))(pos(1)) = symbol
+  }
 
   /* other functions */
   /** Set a square with hit representation
     * @param square The square that has to be changed by a hit
     */
-  def setHit(square: String):Unit = ???
+  def setHit(square: String):Unit = {
+    representation_(square, "o")
+  }
 
   /** Set a square with sunk representation
     * @param square The square that has to be changed by a sunk
     */
-  def setSunk(square: String): Unit = ???
-
+  def setSunk(square: String): Unit = {
+    representation_(square, "S")
+  }
   /** Set a square with miss representation
     * @param square The square that has to be changed by a miss
     */
-  def setMiss(square: String): Unit = ???
-*/
+  def setMiss(square: String): Unit = {
+    representation_(square, "x")
+  }
+
+  /** Override toString for Grid
+    */
+  override def toString(): String = {"a"} //TODO: write this function
+
 }

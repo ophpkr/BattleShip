@@ -1,14 +1,14 @@
 package game
-/*
+
 /** A Player taking part of a battleship.
   *
   *  @constructor create a new player with a name.
   *  @param pName the player's name
   */
-class Player(pName: String) {
+class Player(pName: String, gridShips: GridOfShips) {
   private val _name = pName
-  var _shipsGrid: GridOfShips
-  var _attackGrid: GridOfShips
+  var _shipsGrid = gridShips
+  var _attackGrid = gridShips
   private var _score = 0
 
   /* getters and setters */
@@ -27,4 +27,4 @@ class Player(pName: String) {
     */
   def increaseScore(): Unit = {_score = score + 1}
 
-}*/
+}

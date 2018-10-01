@@ -1,13 +1,15 @@
-/*import org.scalatest._
-import game.GridOfShip
+import org.scalatest._
+import game.GridOfShips
+import game.Grid
 
 class GridOfShipsSpec extends FunSuite with DiagrammedAssertions {
 
   /* test on setHit */
   test("the square a5 has been changed into a hit symbol (o)") {
     var g1 = new GridOfShips("g1", 10)
+
     g1.setHit("a5")
-    assert(Array((".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
+    assert((Array((".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
       (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
       (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
       (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
@@ -17,7 +19,7 @@ class GridOfShipsSpec extends FunSuite with DiagrammedAssertions {
       (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
       (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
       (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", ".")).sameElements(g1.representation))
+      (".", ".", ".", ".", ".", ".", ".", ".", ".", ".")).mkString("")).deep==(g1.representation))
   }
   /* test on setSunk */
   test("the square a5 has been changed into a hit symbol (-)") {
@@ -33,7 +35,7 @@ class GridOfShipsSpec extends FunSuite with DiagrammedAssertions {
       (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
       (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
       (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", ".")).sameElements(g1.representation))
+      (".", ".", ".", ".", ".", ".", ".", ".", ".", ".")).deep==(g1.representation))
   }
   /* test on setMiss */
   test("the square a5 has been changed into a hit symbol (x)") {
@@ -49,7 +51,7 @@ class GridOfShipsSpec extends FunSuite with DiagrammedAssertions {
       (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
       (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
       (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", ".")).sameElements(g1.representation))
+      (".", ".", ".", ".", ".", ".", ".", ".", ".", ".")).deep==(g1.representation))
   }
   /* tests on canOccupySquares */
   test("give the possibility to place a ship on b2, b3, b4") {
@@ -79,7 +81,7 @@ class GridOfShipsSpec extends FunSuite with DiagrammedAssertions {
       (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
       (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
       (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", ".")).sameElements(g1.representation))
+      (".", ".", ".", ".", ".", ".", ".", ".", ".", ".")).deep==(g1.representation))
   }
   /* test on getStateAfterHit */
   test("Give correct states of squares") {
@@ -100,4 +102,3 @@ class GridOfShipsSpec extends FunSuite with DiagrammedAssertions {
     assert((g1.getStateAfterHit("d4"))==="miss")
   }
 }
-*/

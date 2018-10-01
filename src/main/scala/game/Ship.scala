@@ -7,7 +7,7 @@ package game
   *  @param shipSize The ship's size (in number of squares it occupies)
   *  @param shipSquares The squares taken by the ship (they have to succeed each other
   */
-class Ship(shipName: String, shipSize: Int, shipSquares: Set[String]) {
+class Ship(shipName: String, shipSize: Int, shipSquares: Set[String]=Set()) {
   private val _name = shipName
   private var _size = shipSize
   private var _sunk = false
