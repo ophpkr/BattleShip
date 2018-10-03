@@ -23,20 +23,20 @@ object GridHelper {
     * @return Array of two integers corresponding respectively to ordinate and abscissa
     * @example With the given square a2, we'll obtain [1, 0]
     */
-  def squareToArrayPositions(square: String): Array[Int] = {
+  def squareToListPositions(square: String): List[Int] = {
     val letter = square.head
     val number = square.tail
-    Array(intMinusOne(number.toInt), letterToInt(letter.toString.toLowerCase))
+    List(intMinusOne(number.toInt), letterToInt(letter.toString.toLowerCase))
   }
 
   /** Generate a ladder of letter according to the size given
     * @param number The size of the ladder wished. It has to be positive.
     * @return The array of the corresponding ladder
     */
-  def ladderOfLetter(number: Int): Array[Char] = {
+  def ladderOfLetter(number: Int): List[Char] = {
     val alphabet = "abcdefghijklmnopqrstuvwxyz"
     val ladder = alphabet.slice(0, number)
-    ladder.toArray
+    ladder.toList
   }
 
 }

@@ -7,25 +7,26 @@ import helpers.GridHelper
   *  @param name The grid's name
   *  @param size The grid's size (in number of squares for a side)
   */
-class GridOfShips(gName: String, gSize: Int) extends Grid(gName, gSize) {
+case class GridOfShips(private val _name: String, private val _size: Int, private val _verticalLadder: List[String] = List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"),
+                       private val _horizontalLadder: List[String] = List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), private val _representation: List[List[String]]) extends Grid(_name, _size, _verticalLadder, _horizontalLadder, _representation) {
 
   /* Particular functions */
   /** Tell if a ship can occupy the squares given in parameter
     * @param squares Squares we want to know if they are free and exist in the grid.
     * @return Returns true if the squares are free and in the grid else false
     */
-  def canOccupySquares(squares: Array[String]): Boolean = {
-    squares.map(isNotOccupiedSquare).contains(false)
+  def canOccupySquares(squares: List[String]): Boolean = {
+    !(squares.map(square => isNotOccupiedSquare(square))).contains(false)
   }
 
   /** Add a ship representation on the squares given (squares have to exist and be free)
     * @param squares Squares on which we want to place a ship
     */
-  def addShip(squares: Array[String]): Unit = {
-        squares.foreach(square => representation_(square, "S"))
+  def addShip(squares: List[String]): Unit = {
+        squares.map(square => updateSquare(square, "S"))
   }
 
-  /** Get the state of a given square (miss, hit or sunk)
+  /*/** Get the state of a given square (miss, hit or sunk)
     * @param square The square from which we want to know the state
     * @return Returns the state of the square :
     *         "miss" if there is no ship on the square or if a ship has already been hit or sunk,
@@ -35,14 +36,26 @@ class GridOfShips(gName: String, gSize: Int) extends Grid(gName, gSize) {
   def getStateAfterHit(square: String): String = {
     val pos = GridHelper.squareToArrayPositions(square)
     representation(pos(0))(pos(1))
-  }
+  }*/
 
   /** Tell if a square is already taken by a ship
     * @param square The square we want to check it is not occupied
     * @return True if the square is free, else false
     */
   def isNotOccupiedSquare(square: String): Boolean = {
-    val pos = GridHelper.squareToArrayPositions(square)
-    representation(pos(0))(pos(1)) == "."
+    val pos = GridHelper.squareToListPositions(square)
+    representation.apply(pos(0)).apply(pos(1)) == "."
+  }
+
+  override def updateSquare(square: String, symbol: String): GridOfShips = {
+    val pos = GridHelper.squareToListPositions(square)
+    /*var list = representation.map(x => x.toArray)
+    var transf = list.toArray
+    transf(pos(0))(pos(1)) = symbol
+    val t = transf.map(x => x.toList)
+    val newList = t.toList*/
+    val line = representation(pos(0))
+    val newList = representation.updated(pos(0), line.updated(pos(1), symbol))
+    this.copy(_representation = newList)
   }
 }
