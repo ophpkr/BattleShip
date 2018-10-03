@@ -68,11 +68,11 @@ abstract class Grid(private val _name: String, private val _size: Int, private v
     * @return
     */
   def mainGridToString(s: String = "", step: Int = 0): String = {
-    if (step > 1) s
+    if (step >= 10) s
     else {
       val l = this.representation.apply(step).mkString("")
-      val numbersAdded = (step + 1).toString + l
-      val stg = s + numbersAdded.flatMap(x => x.toString + "\t").toString + "\n"
+      // val numbersAdded = (step + 1).toString + l
+      val stg = s + (step + 1).toString + "\t" + l.flatMap(x => x.toString + "\t").toString + "\n"
       mainGridToString(stg, step + 1)
     }
   }

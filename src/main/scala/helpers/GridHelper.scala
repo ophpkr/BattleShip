@@ -39,4 +39,19 @@ object GridHelper {
     ladder.toList
   }
 
+  /**
+    *
+    * @param l
+    * @param size
+    * @return
+    */
+  def addListOfDot(l: List[List[String]] = List(), size: Int): List[List[String]] = {
+    if (l.size >= size) l
+    else {
+      val newList = List.fill(size)(".")
+      val l2 = l :+ newList
+      addListOfDot(l2, size)
+    }
+  }
+
 }
