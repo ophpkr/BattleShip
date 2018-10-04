@@ -67,7 +67,8 @@ object GeneralHelper {
     println("initialisation " + name)
     val rep = initialGrid
     val g: GridOfShips = GridOfShips("gridOfShips "+name, 10, _representation = rep)
-    val p = Player(name, g, Set(), 0)
+    val ga: GridOfAttack = GridOfAttack("gridOfAttack "+name, 10, _representation = rep)
+    val p = Player(name, g, ga, Set(), 0)
     println("The player " + p.name + " has been created")
     p
   }
@@ -81,7 +82,7 @@ object GeneralHelper {
     */
   def putShips(game: Battle, player: Player, numPlayer: String): Battle = {
     println("Positioning " + player.name + "'s ships")
-    val pcarrier = putCarrier(player)
+    /*val pcarrier = putCarrier(player)
     println(pcarrier.shipsGrid.toString)
     val pbatship = putBattleShip(pcarrier)
     println(pbatship.shipsGrid.toString)
@@ -90,10 +91,13 @@ object GeneralHelper {
     val psubmarine = putSubmarine(pcruiser)
     println(psubmarine.shipsGrid.toString)
     val pdestroyer = putDestroyer(psubmarine)
+    println(pdestroyer.shipsGrid.toString)*/
+    val pdestroyer = putDestroyer(player) //TODO: Let the code in comment
     println(pdestroyer.shipsGrid.toString)
     numPlayer match {
       case "player1" => {
-        game.copy(_player1 = pdestroyer)
+        val battle = game.copy(_player1 = pdestroyer)
+        putShips(battle, battle.player2, "player2")
       }
       case "player2" => {
         game.copy(_player2 = pdestroyer)

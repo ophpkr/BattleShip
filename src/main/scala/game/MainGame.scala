@@ -16,6 +16,9 @@ object MainGame {
 
     val newGame = GeneralHelper.putShips(game, p1, "player1")
     println(newGame.player1.shipsGrid.toString)
+    println(newGame.player2.shipsGrid.toString)
+
+    BattleHelper.startBattle(newGame)
   }
 }
 

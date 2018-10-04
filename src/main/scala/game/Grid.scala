@@ -49,7 +49,7 @@ abstract class Grid(private val _name: String, private val _size: Int, private v
   /** Set a square with miss representation
     * @param square The square that has to be changed by a miss
     */
-  def setMiss(square: String): Unit = {
+  def setMiss(square: String): Grid = {
     updateSquare(square, "x")
   }
 

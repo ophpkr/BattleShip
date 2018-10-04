@@ -38,5 +38,7 @@ case class Ship(_name: String, _size: Int, _squaresTaken: Set[String] = Set(), _
     * @param square The square for which we want to know if the ship is on
     * @return Returns true if the ship is on the square else false
     */
-  def isTakenByShip(square: String): Boolean = squaresTaken.contains(square)
+  def isTakenByShip(square: String): Boolean = squaresTaken.apply(square)
+
+
 }

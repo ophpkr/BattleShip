@@ -5,12 +5,12 @@ package game
   *  @constructor create a new player with a name.
   *  @param pName the player's name
   */
-case class Player(private val _name: String, private val _shipsGrid: GridOfShips, private val _ships: Set[Ship] = Set(), private val _score: Int = 0) {
+case class Player(private val _name: String, private val _shipsGrid: GridOfShips, private val _attackGrid: GridOfAttack, private val _ships: Set[Ship], private val _score: Int = 0) {
 
   /* getters */
   def name = _name
   def shipsGrid = _shipsGrid
-  // def attackGrid = _attackGrid
+  def attackGrid = _attackGrid
   def ships = _ships
   def score = _score
 

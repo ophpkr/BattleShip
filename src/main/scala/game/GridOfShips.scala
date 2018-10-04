@@ -1,6 +1,5 @@
 package game
-import helpers.GridHelper
-
+import helpers._
 /** The grid containing a player ships' placements and oponent's hits
   *
   *  @constructor Create a new grid of Ships with a name and size
@@ -64,5 +63,24 @@ case class GridOfShips(private val _name: String, private val _size: Int, privat
     val line = representation(pos(0))
     val newList = representation.updated(pos(0), line.updated(pos(1), symbol))
     this.copy(_representation = newList)
+  }
+
+  def isHit(square: String): Boolean = {
+    val pos = GridHelper.squareToListPositions(square)
+    representation.apply(pos(0)).apply(pos(1)) == "S"
+  }
+
+  /** Set a square with hit representation
+    * @param square The square that has to be changed by a hit
+    */
+  override def setHit(square: String):GridOfShips = {
+    updateSquare(square, "o")
+  }
+
+  /** Set a square with miss representation
+    * @param square The square that has to be changed by a miss
+    */
+  override def setMiss(square: String): GridOfShips = {
+    updateSquare(square, "x")
   }
 }
