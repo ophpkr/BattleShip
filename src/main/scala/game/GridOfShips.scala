@@ -22,10 +22,13 @@ case class GridOfShips(private val _name: String, private val _size: Int, privat
   /** Add a ship representation on the squares given (squares have to exist and be free)
     * @param squares Squares on which we want to place a ship
     */
-  def addShips(squares: List[String], grid: GridOfShips = this, index: Int = 0): GridOfShips = {
-        if (index >= squares.size) grid
-        else
-          addShips(squares, this.updateSquare(squares.apply(index), "S"), index + 1)
+  def addShips(squares: List[String], grid: GridOfShips, index: Int = 0): GridOfShips = {
+        //if (squares.isEmpty) this
+        //else {
+          if (index >= squares.size) grid
+          else
+            addShips(squares, grid.updateSquare(squares.apply(index), "S"), index + 1)
+        //}
 
   }
 
@@ -47,7 +50,7 @@ case class GridOfShips(private val _name: String, private val _size: Int, privat
     */
   def isNotOccupiedSquare(square: String): Boolean = {
     val pos = GridHelper.squareToListPositions(square)
-    if (pos(0) >= size - 1 || pos(1) >= size - 1 ) false
+    if (pos(0) >= size  || pos(1) >= size ) false
     else representation.apply(pos(0)).apply(pos(1)) == "."
   }
 
