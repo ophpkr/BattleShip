@@ -22,8 +22,11 @@ case class GridOfShips(private val _name: String, private val _size: Int, privat
   /** Add a ship representation on the squares given (squares have to exist and be free)
     * @param squares Squares on which we want to place a ship
     */
-  def addShip(squares: List[String]): Unit = {
-        squares.map(square => updateSquare(square, "S"))
+  def addShips(squares: List[String], grid: GridOfShips = this, index: Int = 0): GridOfShips = {
+        if (index >= squares.size) grid
+        else
+          addShips(squares, this.updateSquare(squares.apply(index), "S"), index + 1)
+
   }
 
   /*/** Get the state of a given square (miss, hit or sunk)
@@ -44,7 +47,8 @@ case class GridOfShips(private val _name: String, private val _size: Int, privat
     */
   def isNotOccupiedSquare(square: String): Boolean = {
     val pos = GridHelper.squareToListPositions(square)
-    representation.apply(pos(0)).apply(pos(1)) == "."
+    if (pos(0) >= size - 1 || pos(1) >= size - 1 ) false
+    else representation.apply(pos(0)).apply(pos(1)) == "."
   }
 
   override def updateSquare(square: String, symbol: String): GridOfShips = {

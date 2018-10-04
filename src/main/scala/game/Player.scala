@@ -11,11 +11,19 @@ case class Player(private val _name: String, private val _shipsGrid: GridOfShips
   def name = _name
   def shipsGrid = _shipsGrid
   // def attackGrid = _attackGrid
+  def ships = _ships
   def score = _score
 
   /** Increase score by one
     *
     */
   def increaseScore(): Player = {this.copy(_score = score + 1)}
+
+  /**
+    *
+    */
+  def addShip(ship: Ship): Player = {
+    this.copy(_ships = this.ships + ship)
+  }
 
 }
