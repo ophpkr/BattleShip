@@ -35,18 +35,14 @@ abstract class Grid(private val _name: String, private val _size: Int, private v
     * @param square the square for which we have to put a hit symbol, the square has to exist
     * @return the grid with a hit symbol in the given square
     */
-  def setHit(square: String):Grid = {
-    // updateSquare(square, "o")
-  }
+  def setHit(square: String):Grid
 
   /** Sets a miss symbol in a given square
     *
     * @param square the square for which we have to put a miss symbol, the square has to exist
     * @return the grid with a miss symbol in the given square
     */
-  def setMiss(square: String): Grid = {
-    // updateSquare(square, "x")
-  }
+  def setMiss(square: String): Grid
 
   /** Overrides the toString function
     *

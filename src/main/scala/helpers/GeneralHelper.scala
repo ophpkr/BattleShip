@@ -5,21 +5,26 @@ import scala.io.StdIn
 
 object GeneralHelper {
 
-  /**
+  /** Initializes a grid of dots of size of 10
     *
-    * @return
+    * @return a list of list of dots having a size of 10
     */
   def initialGrid = GridHelper.addListOfDot(List(), 10)
 
+  /** Asks the player the game mode he wishes
+    *
+    * @return a player better defined in the modeGame function
+    */
   def askForMode: Player = {
     println("Please choose a play mode :\n - p for player VS player\n - b to play VS AI level beginner" +
     "\n - m to play VS Ai level medium\n - h to play VS AI level hard")
-    val mode = StdIn.readLine()
+    val mode = StdIn.readLine().toLowerCase()
     modeGame(mode)
   }
   /** According to the mode choosen, different actions will be executed
     *
-    * @param mode
+    * @param mode the mode choosen
+    * @return a player better defined in the askForName function
     */
   def modeGame(mode: String): Player = {
     mode match {
@@ -36,35 +41,33 @@ object GeneralHelper {
     }
   }
 
-  /** Ask for the name of a player
+  /** Asks the player his name
     *
+    * @param player the "number" he is for a game ("p1" for player1, "p2" for player 2), it has to be in ["p1", "p2"]
+    * @return a player better described in initializePlayer function
     */
   def askForName(player: String): Player = {
     player match {
       case "p1" => {
         println("Please enter your name")
-        val name = StdIn.readLine()
+        val name = StdIn.readLine().toLowerCase()
         (initializePlayer(name, 0))
       }
       case "p2" => {
         println("Please enter the name of player2")
-        val name = StdIn.readLine()
+        val name = StdIn.readLine().toLowerCase()
         (initializePlayer(name, 0))
-      }
-      case _ => {
-        println("pas bon")
-        askForName(player)
       }
     }
   }
 
-  /***
+  /** Creates a player with the given paramater
     *
-    * @param name
-    * @return
+    * @param name the name of the player
+    * @param score the score of the player
+    * @return the player corresponding to a player having blank grids (attack and ships) and the given name and score
     */
   def initializePlayer(name: String, score:Int): Player = {
-    println("initialisation " + name)
     val rep = initialGrid
     val g: GridOfShips = GridOfShips("gridOfShips "+name, 10, _representation = rep)
     val ga: GridOfAttack = GridOfAttack("gridOfAttack "+name, 10, _representation = rep)
@@ -73,15 +76,16 @@ object GeneralHelper {
     p
   }
 
-  /**
+  /** Creates a battle once both of the players have put their ships
     *
-    * @param game
-    * @param player
-    * @param numPlayer
-    * @return
+    * @param game the game for which players create ships
+    * @param player the player we put ships for
+    * @param numPlayer the player corresponding to a player having blank grids (attack and ships) and the given name and score
+    * @return the battle having the two players' ships put
     */
   def putShips(game: Battle, player: Player, numPlayer: String): Battle = {
     println("Positioning " + player.name + "'s ships")
+    // creation of the five different ships for the battle
     /*val pcarrier = putCarrier(player)
     println(pcarrier.shipsGrid.toString)
     val pbatship = putBattleShip(pcarrier)
@@ -92,7 +96,7 @@ object GeneralHelper {
     println(psubmarine.shipsGrid.toString)
     val pdestroyer = putDestroyer(psubmarine)
     println(pdestroyer.shipsGrid.toString)*/
-    val pdestroyer = putDestroyer(player) //TODO: Let the code in comment
+    val pdestroyer = putDestroyer(player)
     println(pdestroyer.shipsGrid.toString)
     numPlayer match {
       case "player1" => {
@@ -103,18 +107,16 @@ object GeneralHelper {
         game.copy(_player2 = pdestroyer)
       }
     }
-
-
   }
 
-  /**
+  /** Puts the carrier ship for a given player
     *
-    * @param player
-    * @return
+    * @param player the player we put the carrier for
+    * @return the player with a cruiser put
     */
   def putCarrier(player: Player): Player = {
     println("Where do you want to put your carrier (size of 5 squares) ? ")
-    val pos = StdIn.readLine()
+    val pos = StdIn.readLine().toLowerCase()
     println(validSquare(pos))
     if (validSquare(pos)) {
       val listOfPos = chooseOrientation(player, 5, pos)
@@ -122,7 +124,7 @@ object GeneralHelper {
         putCarrier(player)
       }
       else {
-        val carrier = Ship("carrier", 5, listOfPos.get.toSet, false)
+        val carrier = Ship("carrier", 5, listOfPos.get.toSet)
         val p = player.addShip(carrier)
         val newGridShip = p.shipsGrid.addShips(listOfPos.get, player.shipsGrid, 0)
         return p.copy(_shipsGrid = newGridShip)
@@ -134,14 +136,14 @@ object GeneralHelper {
     }
   }
 
-  /**
+  /** Puts the battleship for a given player
     *
-    * @param player
-    * @return
+    * @param player the player we put the battleship for
+    * @return the player with a battleship put
     */
   def putBattleShip(player: Player): Player = {
     println("Where do you want to put your battleShip (size of 4 squares) ? ")
-    val pos = StdIn.readLine()
+    val pos = StdIn.readLine().toLowerCase()
     println(validSquare(pos))
     if (validSquare(pos)) {
       val listOfPos = chooseOrientation(player, 4, pos)
@@ -149,7 +151,7 @@ object GeneralHelper {
         putBattleShip(player)
       }
       else {
-        val battleShip = Ship("battleShip", 5, listOfPos.get.toSet, false)
+        val battleShip = Ship("battleShip", 5, listOfPos.get.toSet)
         val p = player.addShip(battleShip)
         val newGridShip = p.shipsGrid.addShips(listOfPos.get, player.shipsGrid, 0)
         return p.copy(_shipsGrid = newGridShip)
@@ -161,14 +163,14 @@ object GeneralHelper {
     }
   }
 
-  /**
+  /** Puts the submarine ship for a given player
     *
-    * @param player
-    * @return
+    * @param player the player we put the submarine for
+    * @return the player with a submarine put
     */
   def putSubmarine(player: Player): Player = {
     println("Where do you want to put your submarine (size of 3 squares) ? ")
-    val pos = StdIn.readLine()
+    val pos = StdIn.readLine().toLowerCase()
     println(validSquare(pos))
     if (validSquare(pos)) {
       val listOfPos = chooseOrientation(player, 3, pos)
@@ -176,7 +178,7 @@ object GeneralHelper {
         putSubmarine(player)
       }
       else {
-        val submarine = Ship("submarine", 3, listOfPos.get.toSet, false)
+        val submarine = Ship("submarine", 3, listOfPos.get.toSet)
         val p = player.addShip(submarine)
         val newGridShip = p.shipsGrid.addShips(listOfPos.get, player.shipsGrid, 0)
         return p.copy(_shipsGrid = newGridShip)
@@ -188,14 +190,14 @@ object GeneralHelper {
     }
   }
 
-  /**
+  /** Puts the destroyer ship for a given player
     *
-    * @param player
-    * @return
+    * @param player the player we put the destroyer for
+    * @return the player with a destroyer put
     */
   def putDestroyer(player: Player): Player = {
     println("Where do you want to put your destroyer (size of 2 squares) ? ")
-    val pos = StdIn.readLine()
+    val pos = StdIn.readLine().toLowerCase()
     println(validSquare(pos))
     if (validSquare(pos)) {
       val listOfPos = chooseOrientation(player, 2, pos)
@@ -203,7 +205,7 @@ object GeneralHelper {
         putDestroyer(player)
       }
       else {
-        val destroyeur = Ship("destroyeur", 2, listOfPos.get.toSet, false)
+        val destroyeur = Ship("destroyeur", 2, listOfPos.get.toSet)
         val p = player.addShip(destroyeur)
         val newGridShip = p.shipsGrid.addShips(listOfPos.get, player.shipsGrid, 0)
         return p.copy(_shipsGrid = newGridShip)
@@ -215,14 +217,14 @@ object GeneralHelper {
     }
   }
 
-  /**
+  /** Puts the cruiser ship for a given player
     *
-    * @param player
-    * @return
+    * @param player the player we put the cruiser for
+    * @return the player with a cruiser put
     */
   def putCruiser(player: Player): Player = {
     println("Where do you want to put your cruiser (size of 4 squares) ? ")
-    val pos = StdIn.readLine()
+    val pos = StdIn.readLine().toLowerCase()
     println(validSquare(pos))
     if (validSquare(pos)) {
       val listOfPos = chooseOrientation(player, 4, pos)
@@ -230,7 +232,7 @@ object GeneralHelper {
         putCruiser(player)
       }
       else {
-        val cruiser = Ship("cruiser", 5, listOfPos.get.toSet, false)
+        val cruiser = Ship("cruiser", 4, listOfPos.get.toSet)
         val p = player.addShip(cruiser)
         val newGridShip = p.shipsGrid.addShips(listOfPos.get, player.shipsGrid, 0)
         return p.copy(_shipsGrid = newGridShip)
@@ -242,26 +244,26 @@ object GeneralHelper {
     }
   }
 
-  /**
+  /** Validates the existence of a square for a grid's size of 10
     *
-    * @param square
-    * @return
+    * @param square the square we want to know if it exists
+    * @return true if the square exists else false
     */
   def validSquare(square: String): Boolean = {
     List("a", "b", "c", "d", "e", "f", "g", "h", "i", "j").contains(square.head.toString) &&
     List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").contains(square.tail)
   }
 
-  /**
+  /** Generates an option list of squares for a choosen orientation of a ship
     *
-    * @param player
-    * @param size
-    * @param pos
-    * @return
+    * @param player the player that chooses the orientation
+    * @param size the size of the ship considered
+    * @param pos the initial square the ship
+    * @return a list of string corresponding of all of positions of a ship if all of the squares can be placed on the player's shipsgrid else None
     */
   def chooseOrientation(player: Player, size: Int, pos: String): Option[List[String]] = {
     println("Please choose an orientation for your ship :\n h for horizontal or v for vertical")
-    val orientation = StdIn.readLine()
+    val orientation = StdIn.readLine().toLowerCase()
     orientation match {
       case "h" => {
         val listOfPos = createListOfPos("h", size, pos)
@@ -299,12 +301,12 @@ object GeneralHelper {
     }
   }
 
-  /**
+  /** Generates a list of squares corresponding to the given parameters
     *
-    * @param orientation
-    * @param size
-    * @param pos
-    * @return
+    * @param orientation the orientation of the ship wanted
+    * @param size the size of the ship wanted so the size of the list of squares to return
+    * @param pos the initial position for the ship
+    * @return the list of squares corresponding to the placement wanted
     */
   def createListOfPos(orientation: String, size: Int, pos: String): List[String] = {
     orientation match {
