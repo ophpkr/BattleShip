@@ -30,4 +30,8 @@ case class Player(private val _name: String, private val _shipsGrid: GridOfShips
     ships.forall(x => x.size == 0)
   }
 
+  def updateShips(): Set[Ship] = {
+    ships.filter(x => x.size > 0)
+  }
+
 }
