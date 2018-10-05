@@ -42,11 +42,18 @@ object BattleHelper {
     else {
       val isHit = playerDefending.shipsGrid.isHit(pos)
         if (isHit) {
+          val initialNumberOfAliveShips = playerDefending.updateShips.size
           println("You hit " + playerDefending.name)
           // modifications on the defending player
           val newSetOfShips = playerDefending.ships.map(x => x.removeSquare(pos))
+          val pDef = playerDefending.copy(_ships = newSetOfShips)
           val newGridOfShipsD = playerDefending.shipsGrid.setHit(pos)
-          val newDefPlayer = playerDefending.copy(_shipsGrid = newGridOfShipsD, _ships = newSetOfShips)
+          val numberOfShipsStillAlive = pDef.updateShips.size
+
+          if (initialNumberOfAliveShips - numberOfShipsStillAlive != 0) println ("you sunk a ship of " + playerDefending.name)
+
+
+          val newDefPlayer = pDef.copy(_shipsGrid = newGridOfShipsD, _ships = newSetOfShips)
           // modifications on the attacking player
           val newGridOfAttackA = playerAttacking.attackGrid.setHit(pos)
           val newAttPlayer = playerAttacking.copy(_attackGrid = newGridOfAttackA)
@@ -90,7 +97,8 @@ object BattleHelper {
         val np1 = GeneralHelper.initializePlayer(nbattle.player1.name, nbattle.player1.score)
         val np2 = GeneralHelper.initializePlayer(nbattle.player2.name, nbattle.player2.score)
         val ngame = nbattle.copy(_player1 = np2, _player2 = np1)
-        GeneralHelper.putShips(ngame, ngame.player1, "player1")
+        val game = GeneralHelper.putShips(ngame, ngame.player1, "player1")
+        startBattle(game)
       }
       case false => println("The End")
     }
