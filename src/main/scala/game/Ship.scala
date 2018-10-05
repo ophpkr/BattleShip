@@ -1,29 +1,29 @@
 package game
 
-/** A Ship taking part of a battleship.
+/** A ship for a battleShip
   *
-  *  @constructor Create a new ship with a name, a size and an array of positions (squares)
-  *  @param shipName The ship's name
-  *  @param shipSize The ship's size (in number of squares it occupies)
-  *  @param shipSquares The squares taken by the ship (they have to succeed each other
+  * @param _name the name of the ship
+  * @param _size the size of the ship
+  * @param _squaresTaken the collection of squares taken by the ship
   */
-case class Ship(_name: String, _size: Int, _squaresTaken: Set[String] = Set(), _sunk: Boolean = false) {
+case class Ship(_name: String, _size: Int, _squaresTaken: Set[String] = Set()) {
 
   /* getters */
   def name = _name
   def size = _size
-  def sunk = _sunk
   def squaresTaken = _squaresTaken
 
   /* other functions */
-  /** Decrease the size of the ship by one
-    *@return Ship corresponding to the initial ship with a size decreased by one
+  /** Decreases the size of a ship by one
+    *
+    * @return a ship having the size decreased by one
     */
   def decreaseSize(): Ship = {if(this.size > 0) this.copy(_size = this.size - 1) else this.copy(_size = 0)}
 
-  /** Remove a square taken by the boat if square isn't occupied by the ship, nothing happens
-    *@param square The square we want to remove from the ship
-    *@return The new ship without the square given
+  /** Removes a square from a ship's squaresTaken collection
+    *
+    * @param square the square to remove from the ship's squares collection
+    * @return if the square exists in the collection : a ship with the square removed from its collection and with a size decreased by one else the initial ship
     */
   def removeSquare(square: String): Ship = {
     if (squaresTaken.apply(square)) {
@@ -34,9 +34,10 @@ case class Ship(_name: String, _size: Int, _squaresTaken: Set[String] = Set(), _
     else this
   }
 
-  /** Tell if the ship occupies the given square
-    * @param square The square for which we want to know if the ship is on
-    * @return Returns true if the ship is on the square else false
+  /** Tells if the ship occupies a given square
+    *
+    * @param square the square we want to know if it's occupied by the ship
+    * @return true if the square is taken by the ship else false
     */
   def isTakenByShip(square: String): Boolean = squaresTaken.apply(square)
 

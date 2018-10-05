@@ -8,11 +8,10 @@ object MainGame {
   //TODO: write functions of main here instead of general helper
   def main(args: Array[String]): Unit = {
 
-
     println("------------ BATTLESHIP ------------")
     val p1 = GeneralHelper.askForName("p1")
     val p2 = GeneralHelper.askForMode
-    val game = Battle(p1, p2, false)
+    val game = Battle(p1, p2)
 
     println(p1.name + " starts placing his/her ships : ")
 
@@ -21,9 +20,6 @@ object MainGame {
     println(newGame.player2.shipsGrid.toString)
 
     BattleHelper.startBattle(newGame)
-
-
-
   }
 }
 
