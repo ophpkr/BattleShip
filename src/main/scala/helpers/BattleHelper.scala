@@ -5,13 +5,31 @@ import scala.io.StdIn
 
 object BattleHelper {
 
-  def startBattle(game: Battle): Battle = {
+  def startBattle(game: Battle): Unit = {
     val newPlayers = attackSquare(game.player1, game.player2)
-    val newBattle = game.copy(_player1 = newPlayers.apply(0), _player2 = newPlayers(1))
-    val newPLayers2 = attackSquare(game.player2, game.player1)
-    val newBattle2 = newBattle.copy(_player1 = newPLayers2(1), _player2 = newPLayers2(0))
-    //TODO: ajouter la verification de fin de jeu
-    startBattle(newBattle2)
+    val newBattle = game.copy(_player1 = newPlayers.apply(0), _player2 = newPlayers.apply(1))
+    if (newBattle.player2.hasNoShip) {
+      println(newBattle.player1.name + " won ! ")
+      val p1 = newBattle.player1.increaseScore
+      val ng = newBattle.copy(_player1 = p1)
+      displayScores(ng)
+      manageRestart(ng)
+    }
+    else {
+      val newPlayers2 = attackSquare(newBattle.player2, newBattle.player1)
+      val newBattle2 = newBattle.copy(_player1 = newPlayers2.apply(1), _player2 = newPlayers2.apply(0))
+      if (newBattle2.player1.hasNoShip) {
+        println(newBattle2.player2.name + " won !")
+        val p2 = newBattle.player2.increaseScore
+        val ng = newBattle.copy(_player2 = p2)
+        displayScores(ng)
+        manageRestart(ng)
+      }
+      else {
+        startBattle(newBattle2)
+      }
+      //TODO: ajouter la verification de fin de jeu
+    }
   }
 
   def attackSquare(playerAttacking: Player, playerDefending: Player): List[Player] = {
@@ -36,7 +54,7 @@ object BattleHelper {
           // return list of the two players
           List(newAttPlayer, newDefPlayer)
         } else {
-          val newGridOfShips = playerDefending.shipsGrid.setMiss(pos)
+          // val newGridOfShips = playerDefending.shipsGrid.setMiss(pos)
           println("You missed the attack")
 
           val newGridOfShipsD = playerDefending.shipsGrid.setMiss(pos)
@@ -60,4 +78,35 @@ object BattleHelper {
     List("a", "b", "c", "d", "e", "f", "g", "h", "i", "j").contains(square.head.toString.toLowerCase) &&
       List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").contains(square.tail)
   }
+
+  def displayScores(game: Battle): Unit = {
+    println("Scores :\n - " + game.player1.name + " : " + game.player1.score + "\n - " + game.player2.name + " : " + game.player2.score)
+  }
+
+  def manageRestart(nbattle: Battle): Unit = {
+    val restart = proposeToRestart
+    restart match {
+      case true => {
+        val np1 = GeneralHelper.initializePlayer(nbattle.player1.name, nbattle.player1.score)
+        val np2 = GeneralHelper.initializePlayer(nbattle.player2.name, nbattle.player2.score)
+        val ngame = nbattle.copy(_player1 = np2, _player2 = np1)
+        GeneralHelper.putShips(ngame, ngame.player1, "player1")
+      }
+      case false => println("The End")
+    }
+  }
+
+  def proposeToRestart(): Boolean = {
+    println("Do you want a revange ? (y/n)")
+    val restart = StdIn.readLine().toLowerCase()
+    restart match {
+      case "y" => true
+      case "n" => false
+      case _ => {
+        println("Bad entry")
+        proposeToRestart()
+      }
+    }
+  }
+
 }

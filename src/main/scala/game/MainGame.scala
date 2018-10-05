@@ -1,6 +1,8 @@
 package game
-import scala.io.StdIn
 import helpers._
+import sun.java2d.loops.DrawGlyphListAA.General
+
+import scala.io.StdIn
 
 object MainGame {
   //TODO: write functions of main here instead of general helper
@@ -19,6 +21,9 @@ object MainGame {
     println(newGame.player2.shipsGrid.toString)
 
     BattleHelper.startBattle(newGame)
+
+
+
   }
 }
 

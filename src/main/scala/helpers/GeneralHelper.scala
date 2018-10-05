@@ -44,12 +44,12 @@ object GeneralHelper {
       case "p1" => {
         println("Please enter your name")
         val name = StdIn.readLine()
-        (initializePlayer(name))
+        (initializePlayer(name, 0))
       }
       case "p2" => {
         println("Please enter the name of player2")
         val name = StdIn.readLine()
-        (initializePlayer(name))
+        (initializePlayer(name, 0))
       }
       case _ => {
         println("pas bon")
@@ -63,12 +63,12 @@ object GeneralHelper {
     * @param name
     * @return
     */
-  def initializePlayer(name: String): Player = {
+  def initializePlayer(name: String, score:Int): Player = {
     println("initialisation " + name)
     val rep = initialGrid
     val g: GridOfShips = GridOfShips("gridOfShips "+name, 10, _representation = rep)
     val ga: GridOfAttack = GridOfAttack("gridOfAttack "+name, 10, _representation = rep)
-    val p = Player(name, g, ga, Set(), 0)
+    val p = Player(name, g, ga, Set(), score)
     println("The player " + p.name + " has been created")
     p
   }
@@ -203,7 +203,7 @@ object GeneralHelper {
         putDestroyer(player)
       }
       else {
-        val destroyeur = Ship("destroyeur", 5, listOfPos.get.toSet, false)
+        val destroyeur = Ship("destroyeur", 2, listOfPos.get.toSet, false)
         val p = player.addShip(destroyeur)
         val newGridShip = p.shipsGrid.addShips(listOfPos.get, player.shipsGrid, 0)
         return p.copy(_shipsGrid = newGridShip)
@@ -329,4 +329,5 @@ object GeneralHelper {
       }
     }
   }
+
 }

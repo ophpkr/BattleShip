@@ -26,4 +26,8 @@ case class Player(private val _name: String, private val _shipsGrid: GridOfShips
     this.copy(_ships = this.ships + ship)
   }
 
+  def hasNoShip(): Boolean = {
+    ships.forall(x => x.size == 0)
+  }
+
 }
