@@ -3,6 +3,9 @@ import scala.util.Random
 
 case class AI2(private val _name: String, private val _shipsGrid: GridOfShips, private val _attackGrid: GridOfAttack, private val _ships: Set[Ship], private val _score: Int = 0, _random: Random) extends Player(_name, _shipsGrid, _attackGrid, _ships, _score) with AI {
 
+  private val _alreadyHitSquares: Set[String] = Set()
+
+  def alreadyHitSquares = _alreadyHitSquares
   /* overrides */
 
   override def random = _random
@@ -64,5 +67,9 @@ case class AI2(private val _name: String, private val _shipsGrid: GridOfShips, p
     this.copy(_shipsGrid = gs, _attackGrid = ga, _ships = ships)
   }
 
-  override def attack(): String = randomPosition(this.random)
+  override def attack(): String = {
+    val pos = randomPosition(this.random)
+    if (alreadyHitSquares.apply(pos)) attack()
+    else pos
+  }
 }
