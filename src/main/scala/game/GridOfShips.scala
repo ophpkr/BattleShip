@@ -39,8 +39,12 @@ case class GridOfShips(private val _name: String, private val _size: Int, privat
     * @param square the square for which we have to put a hit symbol, the square has to exist
     * @return the grid with a miss symbol in the given square
     */
-  override def setMiss(square: String): GridOfShips = {
-    updateSquare(square, "x")
+  override def setMiss(square: String): GridOfShips = { // TODO: Test qd a deja tiré sur la case
+    val pos = GridHelper.squareToListPositions(square)
+    if(representation.apply(pos(0)).apply(pos(1)) != "o") {
+      updateSquare(square, "x")
+    }
+    else this
   }
 
   /** Tells if a square is not occupied and exists
