@@ -43,6 +43,17 @@ case class GridOfShips(private val _name: String, private val _size: Int, privat
     updateSquare(square, "x")
   }
 
+  /** Tells if a square is not occupied and exists
+    *
+    * @param square the square for which we wonder if it isn't already taken
+    * @return true if the square is free and exists else false
+    */
+  def isNotOccupiedSquare(square: String): Boolean = {
+    val pos = GridHelper.squareToListPositions(square)
+    if (pos(0) >= size  || pos(1) >= size ) false
+    else representation.apply(pos(0)).apply(pos(1)) == "."
+  }
+
   /** Tells if a list of squares given can occupy the grid
     *
     * @param squares the list of squares we want to add
@@ -64,16 +75,6 @@ case class GridOfShips(private val _name: String, private val _size: Int, privat
           else addShips(squares, grid.updateSquare(squares.apply(index), "S"), index + 1)
   }
 
-  /** Tells if a square is not occupied and exists
-    *
-    * @param square the square for which we wonder if it isn't already taken
-    * @return true if the square is free and exists else false
-    */
-  def isNotOccupiedSquare(square: String): Boolean = {
-    val pos = GridHelper.squareToListPositions(square)
-    if (pos(0) >= size  || pos(1) >= size ) false
-    else representation.apply(pos(0)).apply(pos(1)) == "."
-  }
 
   /** Tells if a square is taken by a ship
     *

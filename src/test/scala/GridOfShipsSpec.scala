@@ -1,104 +1,40 @@
 import org.scalatest._
 import game.GridOfShips
 import game.Grid
+import helpers._
 
 class GridOfShipsSpec extends FunSuite with DiagrammedAssertions {
 
-  /* test on setHit */
+  /* test on setHit (test the updateSquare function too) */
   test("the square a5 has been changed into a hit symbol (o)") {
-    var g1 = new GridOfShips("g1", 10)
-
-    g1.setHit("a5")
-    assert((Array((".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      ("o", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", ".")).mkString("")).deep==(g1.representation))
+    val g1 = GridOfShips("g1", 10, List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), GridHelper.addListOfDot(List(), 10))
+    val g2 = g1.setHit("a5")
+    assert(g2.representation.apply(4).apply(0) == "o")
   }
-  /* test on setSunk */
-  test("the square a5 has been changed into a hit symbol (-)") {
-    var g1 = new GridOfShips("g1", 10)
-    g1.setSunk("a5")
-    assert(Array((".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      ("-", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", ".")).deep==(g1.representation))
-  }
-  /* test on setMiss */
+  /* test on setMiss (test the updateSquare function too) */
   test("the square a5 has been changed into a hit symbol (x)") {
-    var g1 = new GridOfShips("g1", 10)
-    g1.setMiss("a5")
-    assert(Array((".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      ("x", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", ".")).deep==(g1.representation))
+    val g1 = GridOfShips("g1", 10, List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), GridHelper.addListOfDot(List(), 10))
+    val g2 = g1.setMiss("a5")
+    assert(g2.representation.apply(4).apply(0) == "x")
   }
   /* tests on canOccupySquares */
   test("give the possibility to place a ship on b2, b3, b4") {
-    var g1 = new GridOfShips("g1", 10)
-    assert(g1.canOccupySquares(Array("b2", "b3", "b4")))
+    val g1 = GridOfShips("g1", 10, List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), GridHelper.addListOfDot(List(), 10))
+    assert(g1.canOccupySquares(List("b2", "b3", "b4")))
   }
   test("give not the possibility to place a ship on b2, b3, b4 because occupied") {
-    var g1 = new GridOfShips("g1", 10)
-    g1.addShip(Array("b2", "b3", "b4"))
-    assert(!(g1.canOccupySquares(Array("b2", "b3", "b4"))))
+    val g1 = GridOfShips("g1", 10, List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), GridHelper.addListOfDot(List(), 10))
+    val g2 = g1.addShips(List("b2", "b3", "b4"), g1, 0)
+    assert(!(g2.canOccupySquares(List("b2", "b3", "b4"))))
   }
   test("give not the possibility to place a ship on unexisting squares") {
-    var g1 = new GridOfShips("g1", 10)
-    assert(!(g1.canOccupySquares(Array("b9", "b10", "b11"))))
+    val g1 = GridOfShips("g1", 10, List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), GridHelper.addListOfDot(List(), 10))
+    assert(!(g1.canOccupySquares(List("b9", "b10", "b11"))))
   }
   /* test on addShip */
   test("a ship has been put on c1,c2,c3") {
-    var g1 = new GridOfShips("g1", 10)
-    g1.addShip(Array("c1", "c2", "c3"))
-    assert(Array((".", ".", "S", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", "S", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", "S", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", ".")).deep==(g1.representation))
-  }
-  /* test on getStateAfterHit */
-  test("Give correct states of squares") {
-    var g1 = new GridOfShips("g1", 10)
-    g1.addShip(Array("c1", "c2", "c3"))
-    g1.setHit("b1")
-    g1.setSunk("j3")
-    g1.setMiss("d4")
-    //when the ship has been hit but still the hit maden't it sunk
-    assert((g1.getStateAfterHit("c1"))==="hit")
-    //when the ship is sunk right after the hit
-    g1.setHit("c2")
-    assert((g1.getStateAfterHit("c3"))==="sunk")
-    //when it is a miss
-    assert((g1.getStateAfterHit("e3"))==="miss")
-    assert((g1.getStateAfterHit("b1"))==="miss")
-    assert((g1.getStateAfterHit("j3"))==="miss")
-    assert((g1.getStateAfterHit("d4"))==="miss")
+    val g1 = GridOfShips("g1", 10, List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), GridHelper.addListOfDot(List(), 10))
+    val g2 = g1.addShips(List("c1", "c2", "c3"), g1, 0)
+    assert(g2.representation.apply(0).apply(2) == "S" && g2.representation.apply(1).apply(2) == "S" && g2.representation.apply(2).apply(2) == "S")
   }
 }

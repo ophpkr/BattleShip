@@ -1,56 +1,20 @@
-/*import org.scalatest._
+import org.scalatest._
 import game.GridOfAttack
+import game.Grid
+import helpers._
 
 class GridOfAttackSpec extends FunSuite with DiagrammedAssertions {
 
-  /* test on setHit */
+  /* test on setHit (test the updateSquare function too) */
   test("the square a5 has been changed into a hit symbol (o)") {
-    var g1 = new GridOfAttack("g1", 10)
-    g1.setHit("a5")
-    assert(Array((".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      ("o", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", ".")).sameElements(g1.representation))
+    val g1 = GridOfAttack("g1", 10, List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), GridHelper.addListOfDot(List(), 10))
+    val g2 = g1.setHit("a5")
+    assert(g2.representation.apply(4).apply(0) == "o")
   }
-  /* test on setHit */
-  test("the square a5 has been changed into a hit symbol (o)") {
-    var g1 = new GridOfAttack("g1", 10)
-    g1.setSunk("a5")
-    assert(Array((".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      ("-", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", ".")).sameElements(g1.representation))
+  /* test on setMiss (test the updateSquare function too) */
+  test("the square a5 has been changed into a hit symbol (x)") {
+    val g1 = GridOfAttack("g1", 10, List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), GridHelper.addListOfDot(List(), 10))
+    val g2 = g1.setMiss("a5")
+    assert(g2.representation.apply(4).apply(0) == "x")
   }
-  /* test on setHit */
-  test("the square a5 has been changed into a hit symbol (o)") {
-    var g1 = new GridOfAttack("g1", 10)
-    g1.setMiss("a5")
-    assert(Array((".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      ("x", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", "."),
-      (".", ".", ".", ".", ".", ".", ".", ".", ".", ".")).sameElements(g1.representation))
-  }
-
-
-}*/
+}
