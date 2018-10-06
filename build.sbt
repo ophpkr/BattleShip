@@ -1,8 +1,8 @@
 ThisBuild / scalaVersion := "2.12.6"
-ThisBuild / organization := "com.example"
+ThisBuild / organization := "com.game"
 
-lazy val hello = (project in file("."))
+lazy val battleship = (project in file("."))
   .settings(
-    name := "Hello",
+    name := "BattleShip",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % Test,
   )
