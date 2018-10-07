@@ -100,7 +100,7 @@ object GeneralHelper {
     * @return the battle having the two players' ships put
     */
   def putShips(game: Battle, player: Player, numPlayer: String): Battle = {
-    println("Positioning " + player.name + "'s ships")//TODO: speaker
+    // println("Positioning " + player.name + "'s ships")//TODO: speaker
     val pdestroyer = player match {
       case HumanPlayer(_, _, _, _, _) => {
         // creation of the five different ships for the battle
@@ -117,7 +117,7 @@ object GeneralHelper {
         this.putDestroyer(player)
         // println(pdestroyer.shipsGrid.toString)
       }
-      case AI1(_, _, _, _, _, _) | AI2(_, _, _, _, _, _) | AI3(_, _, _, _, _, _) => {
+      case AI1(_, _, _, _, _, _) | AI2(_, _, _, _, _, _, _) | AI3(_, _, _, _, _, _) => {
         player.asInstanceOf[AI].initShips(player)
       }
     }
@@ -356,5 +356,35 @@ object GeneralHelper {
     if(!speak.isEmpty) {
       println(speak.get)
     }
+  }
+
+  def preparePlayer(typeAI: String): Player = {
+    val rep = initialGrid
+    typeAI match {
+      case "ai1" => {
+        val g: GridOfShips = GridOfShips("gridOfShips AI beginer", 10, _representation = rep)
+        val ga: GridOfAttack = GridOfAttack("gridOfAttack AI begginer", 10, _representation = rep)
+        val r = Random
+        AI1("AI begginer", g, ga, Set(), 0, r)
+      }
+      case "ai2" => {
+        val r = Random
+        val g: GridOfShips = GridOfShips("gridOfShips AI medium", 10, _representation = rep)
+        val ga: GridOfAttack = GridOfAttack("gridOfAttack AI medium", 10, _representation = rep)
+        AI2("AI medium", g, ga, Set(), 0, r, Set())
+      }
+      case "ai3" => {
+        val r = Random
+        val g: GridOfShips = GridOfShips("gridOfShips AI hard", 10, _representation = rep)
+        val ga: GridOfAttack = GridOfAttack("gridOfAttack AI hard", 10, _representation = rep)
+        AI3("AI hard", g, ga, Set(), 0, r)
+      }
+      case _ => this.askType
+    }
+  }
+
+  def askType(): Player = {
+    val typeAI = StdIn.readLine().toLowerCase
+    preparePlayer(typeAI)
   }
 }

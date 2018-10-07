@@ -17,7 +17,7 @@ trait AI {
     val letterInInt = r.nextInt(10)
     val number = r.nextInt(10) + 1
     val letter = GridHelper.intToLetter(letterInInt)
-    println("position choisie : " + letter + number.toString)
+    // println("position choisie : " + letter + number.toString)
     letter + number.toString
   }
 

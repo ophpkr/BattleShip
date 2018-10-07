@@ -1,9 +1,7 @@
 package game
 import scala.util.Random
 
-case class AI2(private val _name: String, private val _shipsGrid: GridOfShips, private val _attackGrid: GridOfAttack, private val _ships: Set[Ship], private val _score: Int = 0, _random: Random) extends Player(_name, _shipsGrid, _attackGrid, _ships, _score) with AI {
-
-  private val _alreadyHitSquares: Set[String] = Set()
+case class AI2(private val _name: String, private val _shipsGrid: GridOfShips, private val _attackGrid: GridOfAttack, private val _ships: Set[Ship], private val _score: Int = 0, _random: Random, private val _alreadyHitSquares: Set[String] = Set()) extends Player(_name, _shipsGrid, _attackGrid, _ships, _score) with AI {
 
   def alreadyHitSquares = _alreadyHitSquares
   /* overrides */
@@ -71,5 +69,12 @@ case class AI2(private val _name: String, private val _shipsGrid: GridOfShips, p
     val pos = randomPosition(this.random)
     if (alreadyHitSquares.apply(pos)) attack()
     else pos
+  }
+
+  def copySquaresHit(newSquares: Set[String]): AI2 = { this.copy(_alreadyHitSquares = newSquares) }
+
+  def addPos(square: String): Player = {
+    val newSquares = alreadyHitSquares+ square
+    copySquaresHit(newSquares)
   }
 }

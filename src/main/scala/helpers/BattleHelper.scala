@@ -5,6 +5,9 @@ import game._
 /** Helper for the attack part of a battleship */
 object BattleHelper {
 
+  private var _loop:Int = 0 // used for loops for AIs try
+  def loop = _loop
+  def loop_ = { _loop = loop + 1 }
   /** Constitutes the main loop of the attack part of a battleShip
     *
     * @param game the game to launch
@@ -57,7 +60,7 @@ object BattleHelper {
     val pos = playerAttacking match {
       case HumanPlayer(_,_,_,_,_) => StdIn.readLine().toLowerCase()
       case AI1(_,_,_,_,_,_) => playerAttacking.asInstanceOf[AI1].attack
-      case AI2(_,_,_,_,_,_) => playerAttacking.asInstanceOf[AI2].attack
+      case AI2(_,_,_,_,_,_,_) => playerAttacking.asInstanceOf[AI2].attack
       case AI3(_,_,_,_,_,_) => playerAttacking.asInstanceOf[AI3].attack
     }
     // if the square doesn't exist, the player has to give another square
@@ -86,7 +89,16 @@ object BattleHelper {
 
           // "modifications" on the attacking player
           val newGridOfAttackA = playerAttacking.attackGrid.setHit(pos)
-          val newAttPlayer = playerAttacking.copyAttackGrid(newGridOfAttackA)
+          val newAttPlayer = playerAttacking match {
+            case AI2(_,_,_,_,_,_,_) => {
+              val pai2 = playerAttacking.asInstanceOf[AI2].addPos(pos)
+              pai2.copyAttackGrid(newGridOfAttackA)
+              // playerAttacking.copyAttackGrid(newGridOfAttackA)
+            }
+            case _ => {
+              playerAttacking.copyAttackGrid(newGridOfAttackA)
+            }
+          }
 
           // return list of the two players
           List(newAttPlayer, newDefPlayer)
@@ -104,12 +116,12 @@ object BattleHelper {
           val newAttPlayer = playerAttacking.copyAttackGrid(newGridOfAttackA)
 
           //TODO: Delete those print and add print of grids when needed
-          println("attack : ")
+          /*println("attack : ")
           println(newAttPlayer.shipsGrid.toString)
           println(newAttPlayer.attackGrid.toString)
           println("def : ")
           println(newDefPlayer.shipsGrid.toString)
-          println(newDefPlayer.attackGrid.toString)
+          println(newDefPlayer.attackGrid.toString)*/
           List(newAttPlayer, newDefPlayer)
         }
     }
@@ -141,7 +153,7 @@ object BattleHelper {
     * @param nbattle the battle we propose to restart
     */
   def manageRestart(nbattle: Battle): Unit = {
-    val restart = proposeToRestart
+    val restart = this.askRestart(nbattle)
     restart match {
       case true => {
         val np1 = resetPlayer(nbattle.player1)
@@ -175,6 +187,31 @@ object BattleHelper {
     val rep = GeneralHelper.initialGrid
     val g: GridOfShips = GridOfShips("gridOfShips "+player.name, 10, _representation = rep)
     val ga: GridOfAttack = GridOfAttack("gridOfAttack "+player.name, 10, _representation = rep)
-    player.copyGridsAndShips(g, ga, Set())
+    player match {
+      case AI2(_,_,_,_,_,_,_) =>  {
+        val pnorm = player.copyGridsAndShips(g, ga, Set())
+        pnorm.asInstanceOf[AI2].copySquaresHit(Set())
+      }
+      case _ =>  player.copyGridsAndShips(g, ga, Set())
+    }
+  }
+
+  def askRestart(game: Battle): Boolean = {
+    if (game.player1.isInstanceOf[HumanPlayer] || game.player1.isInstanceOf[HumanPlayer]) {
+      val restart = this.proposeToRestart
+      restart
+    }
+    else {
+      if (this.loop < 100) {
+        println("loop " + this.loop)
+        this.loop_
+        val restart = true
+        restart
+      }
+      else {
+        val restart = false
+        restart
+      }
+    }
   }
 }
