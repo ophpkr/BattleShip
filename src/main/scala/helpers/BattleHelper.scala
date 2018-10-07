@@ -5,7 +5,7 @@ import game._
 /** Helper for the attack part of a battleship */
 object BattleHelper {
 
-  private var _loop:Int = 0 // used for loops for AIs try
+  private var _loop: Int = 0 // used for loops for AIs try
   def loop = _loop
   def loop_ = { _loop = loop + 1 }
   /** Constitutes the main loop of the attack part of a battleShip
@@ -13,6 +13,7 @@ object BattleHelper {
     * @param game the game to launch
     */
   def startBattle(game: Battle): Unit = {
+    println("startbattle")
     // start with the player who has to start attck the oponent
     val newPlayers = attackSquare(game.player1, game.player2)
     val newBattle = game.copy(_player1 = newPlayers.apply(0), _player2 = newPlayers.apply(1))
@@ -61,69 +62,88 @@ object BattleHelper {
       case HumanPlayer(_,_,_,_,_) => StdIn.readLine().toLowerCase()
       case AI1(_,_,_,_,_,_) => playerAttacking.asInstanceOf[AI1].attack
       case AI2(_,_,_,_,_,_,_) => playerAttacking.asInstanceOf[AI2].attack
-      case AI3(_,_,_,_,_,_) => playerAttacking.asInstanceOf[AI3].attack
+      case AI3(_,_,_,_,_,_,_,_,_) => playerAttacking.asInstanceOf[AI3].attack
     }
     // if the square doesn't exist, the player has to give another square
     if(!validSquare(pos)) {
-      println("the square attacked doesn't exist") //no need of GeneralHelper.printer because alxays true for AI
-      attackSquare(playerAttacking, playerDefending) }
+      println("the square attacked doesn't exist") //no need of GeneralHelper.printer because always true for AI
+      attackSquare(playerAttacking, playerDefending)
+    }
     else {
       val isHit = playerDefending.shipsGrid.isHit(pos)
       // if the attacking player hit a defending player's ship
-        if (isHit) {
-          val initialNumberOfAliveShips = playerDefending.updateShips.size
-          // println("You hit " + playerDefending.name)
-          GeneralHelper.printer(playerAttacking.hitSpeak(playerDefending))
-          // "modifications" on the defending player
-          val newSetOfShips = playerDefending.ships.map(x => x.removeSquare(pos))
-          //val pDef = playerDefending.copyShips(_ships = newSetOfShips) : already changed 3 lines down
-          val newGridOfShipsD = playerDefending.shipsGrid.setHit(pos)
-          val numberOfShipsStillAlive = playerDefending.updateShips.size
-          val newDefPlayer = playerDefending.copyGridShipsAndShips(newGridOfShipsD, newSetOfShips)
+      if (isHit) {
+        val initialNumberOfAliveShips = playerDefending.updateShips.size
+        // println("You hit " + playerDefending.name)
+        GeneralHelper.printer(playerAttacking.hitSpeak(playerDefending))
+        // "modifications" on the defending player
+        val newSetOfShips = playerDefending.ships.map(x => x.removeSquare(pos))
+        //val pDef = playerDefending.copyShips(_ships = newSetOfShips) : already changed 3 lines down
+        val newGridOfShipsD = playerDefending.shipsGrid.setHit(pos)
+        val numberOfShipsStillAlive = playerDefending.updateShips.size
+        val newDefPlayer = playerDefending.copyGridShipsAndShips(newGridOfShipsD, newSetOfShips)
 
-          // checks if a ship has been sunk in consequence to the hit
-          if (initialNumberOfAliveShips - numberOfShipsStillAlive != 0) {
-            // println ("you sunk a ship of " + playerDefending.name)
-            GeneralHelper.printer(playerAttacking.sunkSpeak(playerDefending))
+        // "modifications" on the attacking player
+        val newGridOfAttackA = playerAttacking.attackGrid.setHit(pos)
+        val newAttPlayer = playerAttacking match {
+          case AI2(_, _, _, _, _, _, _) => {
+            val pai2 = playerAttacking.asInstanceOf[AI2].addPos(pos)
+            pai2.copyAttackGrid(newGridOfAttackA)
+          }
+          // playerAttacking.copyAttackGrid(newGridOfAttackA)
+          case AI3(_, _, _, _, _, _, _, _, _) => {
+            val pai3 = playerAttacking.asInstanceOf[AI3].manageHit(pos)
+            pai3.copyAttackGrid(newGridOfAttackA)
           }
 
-          // "modifications" on the attacking player
-          val newGridOfAttackA = playerAttacking.attackGrid.setHit(pos)
-          val newAttPlayer = playerAttacking match {
-            case AI2(_,_,_,_,_,_,_) => {
-              val pai2 = playerAttacking.asInstanceOf[AI2].addPos(pos)
-              pai2.copyAttackGrid(newGridOfAttackA)
-              // playerAttacking.copyAttackGrid(newGridOfAttackA)
-            }
-            case _ => {
-              playerAttacking.copyAttackGrid(newGridOfAttackA)
-            }
+          case _ => {
+            playerAttacking.copyAttackGrid(newGridOfAttackA)
           }
+        }
 
+
+        // checks if a ship has been sunk in consequence to the hit
+        if (initialNumberOfAliveShips - numberOfShipsStillAlive != 0) {
+          // println ("you sunk a ship of " + playerDefending.name)
+          GeneralHelper.printer(playerAttacking.sunkSpeak(playerDefending))
+          val newAttPl = playerAttacking match {
+            case AI3(_,_,_,_,_,_,_,_,_) => newAttPlayer.asInstanceOf[AI3].manageSunk(pos)
+            case _ => newAttPlayer
+          }
+          List(newAttPl, newDefPlayer)
+        }
+        else {
           // return list of the two players
           List(newAttPlayer, newDefPlayer)
-        // if the attacking player missed his hit
-        } else {
-          // println("You missed the attack")
-          GeneralHelper.printer(playerAttacking.missSpeak)
-
-          // "modifications" on the defending player
-          val newGridOfShipsD = playerDefending.shipsGrid.setMiss(pos)
-          val newDefPlayer = playerDefending.copyShipsGrid(newGridOfShipsD)
-
-          // "modifications on the attacking player
-          val newGridOfAttackA = playerAttacking.attackGrid.setMiss(pos)
-          val newAttPlayer = playerAttacking.copyAttackGrid(newGridOfAttackA)
-
-          //TODO: Delete those print and add print of grids when needed
-          /*println("attack : ")
-          println(newAttPlayer.shipsGrid.toString)
-          println(newAttPlayer.attackGrid.toString)
-          println("def : ")
-          println(newDefPlayer.shipsGrid.toString)
-          println(newDefPlayer.attackGrid.toString)*/
-          List(newAttPlayer, newDefPlayer)
         }
+
+
+        // if the attacking player missed his hit
+      } else {
+        // println("You missed the attack")
+        GeneralHelper.printer(playerAttacking.missSpeak)
+
+        // "modifications" on the defending player
+        val newGridOfShipsD = playerDefending.shipsGrid.setMiss(pos)
+        val newDefPlayer = playerDefending.copyShipsGrid(newGridOfShipsD)
+
+        // "modifications on the attacking player
+        val newGridOfAttackA = playerAttacking.attackGrid.setMiss(pos)
+        val natt = playerAttacking match {
+          case AI3(_,_,_,_,_,_,_,_,_) => playerAttacking.asInstanceOf[AI3].manageMiss(pos)
+          case _ => playerAttacking
+        }
+        val newAttPlayer = natt.copyAttackGrid(newGridOfAttackA)
+
+        //TODO: Delete those print and add print of grids when needed
+        /*println("attack : ")
+        println(newAttPlayer.shipsGrid.toString)
+        println(newAttPlayer.attackGrid.toString)
+        println("def : ")
+        println(newDefPlayer.shipsGrid.toString)
+        println(newDefPlayer.attackGrid.toString)*/
+        List(newAttPlayer, newDefPlayer)
+      }
     }
   }
 

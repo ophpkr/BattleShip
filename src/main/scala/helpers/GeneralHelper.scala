@@ -84,7 +84,7 @@ object GeneralHelper {
       }
       case 3 => {
         val r = Random
-        AI3(name, g, ga, Set(), 0, r)
+        AI3(name, g, ga, Set(), 0, r, initMapAI3(Map(), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")), "", Set())
       }
     }
     printer(p.creationSpeak)
@@ -117,7 +117,7 @@ object GeneralHelper {
         this.putDestroyer(player)
         // println(pdestroyer.shipsGrid.toString)
       }
-      case AI1(_, _, _, _, _, _) | AI2(_, _, _, _, _, _, _) | AI3(_, _, _, _, _, _) => {
+      case AI1(_, _, _, _, _, _) | AI2(_, _, _, _, _, _, _) | AI3(_, _, _, _, _, _, _, _, _) => {
         player.asInstanceOf[AI].initShips(player)
       }
     }
@@ -377,14 +377,37 @@ object GeneralHelper {
         val r = Random
         val g: GridOfShips = GridOfShips("gridOfShips AI hard", 10, _representation = rep)
         val ga: GridOfAttack = GridOfAttack("gridOfAttack AI hard", 10, _representation = rep)
-        AI3("AI hard", g, ga, Set(), 0, r)
+        AI3("AI hard", g, ga, Set(), 0, r, initMapAI3(Map(), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")), "", Set())
       }
-      case _ => this.askType
+      case _ => {
+        println("pb")
+        askType
+      }
     }
   }
 
   def askType(): Player = {
+    println("coucou")
     val typeAI = StdIn.readLine().toLowerCase
     preparePlayer(typeAI)
+  }
+
+  def initMapAI3(map: Map[String, String], letters: List[String], numbers: List[String]): Map[String, String] = {
+    // all positions have been created
+    if (letters.isEmpty) map
+    else {
+      // the entire colomn has been created
+      if (numbers.isEmpty) {
+        val nletters = letters.drop(0)
+        val nnumbers = List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
+        initMapAI3(map, nletters, nnumbers)
+      }
+      else {
+        // add a new key value
+        val nmap = map + (letters.apply(0) + numbers(0) -> "0")
+        val nnumbers = numbers.drop(0)
+        initMapAI3(nmap, letters, nnumbers)
+      }
+    }
   }
 }
