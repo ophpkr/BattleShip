@@ -74,7 +74,7 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
       // there is at least one square with the "1" value. 1 being the maximum value
       if (higherProbability.isEmpty && mediumProbility.isEmpty) {
         val randint = this.random.nextInt(simpleProbability.size)
-        higherProbability.toList.apply(randint)
+        simpleProbability.toList.apply(randint)
       }
       else {
         // there is at least one square with the "2" value. 2 being the maximum value
@@ -202,7 +202,7 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
       if (numbers.isEmpty) s
       else {
         val square = column + numbers.apply(0)
-        createSetColumn(s + square, numbers.drop(0), column)
+        createSetColumn(s + square, numbers.drop(1), column)
       }
     }
 
@@ -210,7 +210,7 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
     if (letters.isEmpty) s
     else {
       val square = letters.apply(0) + line
-      createSetColumn(s + square, letters.drop(0), line)
+      createSetColumn(s + square, letters.drop(1), line)
     }
   }
 
@@ -401,7 +401,7 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
     if (listSquares.isEmpty) map
     else {
       val nmap = map + (listSquares.apply(0) -> value)
-      updateMap(nmap, listSquares.drop(0), value)
+      updateMap(nmap, listSquares.drop(1), value)
     }
   }
 }

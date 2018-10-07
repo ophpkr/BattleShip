@@ -100,7 +100,7 @@ object GeneralHelper {
     * @return the battle having the two players' ships put
     */
   def putShips(game: Battle, player: Player, numPlayer: String): Battle = {
-    // println("Positioning " + player.name + "'s ships")//TODO: speaker
+    println("Positioning " + player.name + "'s ships")//TODO: speaker
     val pdestroyer = player match {
       case HumanPlayer(_, _, _, _, _) => {
         // creation of the five different ships for the battle
@@ -374,10 +374,11 @@ object GeneralHelper {
         AI2("AI medium", g, ga, Set(), 0, r, Set())
       }
       case "ai3" => {
+        println("case ai3")
         val r = Random
         val g: GridOfShips = GridOfShips("gridOfShips AI hard", 10, _representation = rep)
         val ga: GridOfAttack = GridOfAttack("gridOfAttack AI hard", 10, _representation = rep)
-        AI3("AI hard", g, ga, Set(), 0, r, initMapAI3(Map(), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")), "", Set())
+        AI3("AI hard", g, ga, Set(), 0, r, this.initMapAI3(Map[String, String](), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")), "", Set())
       }
       case _ => {
         println("pb")
@@ -393,19 +394,23 @@ object GeneralHelper {
   }
 
   def initMapAI3(map: Map[String, String], letters: List[String], numbers: List[String]): Map[String, String] = {
+    //println("initMapAI3")
+    //println(BattleHelper.loop.toString)
     // all positions have been created
     if (letters.isEmpty) map
-    else {
+      else {
       // the entire colomn has been created
       if (numbers.isEmpty) {
-        val nletters = letters.drop(0)
+        val nletters = letters.drop(1)
         val nnumbers = List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
         initMapAI3(map, nletters, nnumbers)
       }
       else {
         // add a new key value
-        val nmap = map + (letters.apply(0) + numbers(0) -> "0")
-        val nnumbers = numbers.drop(0)
+        println(letters.apply(0).toLowerCase() + numbers.apply(0))
+        val nmap = map + (letters.apply(0).toLowerCase() + numbers.apply(0) -> "0")
+        val nnumbers = numbers.drop(1)
+        println(nnumbers.mkString(""))
         initMapAI3(nmap, letters, nnumbers)
       }
     }

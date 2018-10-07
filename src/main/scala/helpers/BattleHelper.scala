@@ -222,7 +222,7 @@ object BattleHelper {
       restart
     }
     else {
-      if (this.loop < 100) {
+      if (this.loop <= 100) {
         println("loop " + this.loop)
         this.loop_
         val restart = true
