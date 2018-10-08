@@ -1,4 +1,6 @@
-package game
+package main.scala.players
+
+import main.scala.elements.{GridOfAttack, GridOfShips, Ship}
 
 case class HumanPlayer(private val _name: String, private val _shipsGrid: GridOfShips, private val _attackGrid: GridOfAttack, private val _ships: Set[Ship], private val _score: Int = 0) extends Player(_name, _shipsGrid, _attackGrid, _ships, _score) {
 

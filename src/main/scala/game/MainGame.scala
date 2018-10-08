@@ -1,5 +1,6 @@
 package game
 import helpers._
+import main.scala.elements.Battle
 import sun.java2d.loops.DrawGlyphListAA.General
 
 import scala.io.StdIn

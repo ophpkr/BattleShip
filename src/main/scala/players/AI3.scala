@@ -1,7 +1,10 @@
-package game
+package main.scala.players
+
+import helpers.GridHelper
+import main.scala.elements.{GridOfAttack, GridOfShips, Ship}
+
 import scala.annotation.tailrec
 import scala.util.Random
-import helpers._
 
 /** An AI3 for a battleship game
   *

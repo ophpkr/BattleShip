@@ -1,4 +1,4 @@
-package game
+package main.scala.players
 
 /** A trait expressing the speech corresponding to each event of a battleShip */
 trait Speaker {

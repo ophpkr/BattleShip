@@ -1,4 +1,4 @@
-package game
+package main.scala.elements
 
 import scala.annotation.tailrec
 

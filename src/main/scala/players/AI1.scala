@@ -1,4 +1,6 @@
-package game
+package main.scala.players
+
+import main.scala.elements.{GridOfAttack, GridOfShips, Ship}
 
 import scala.util.Random
 

@@ -1,6 +1,6 @@
+import main.scala.elements.Ship
 import org.scalatest._
-import game.Ship
-/*
+
 class ShipSpec extends FunSuite with DiagrammedAssertions {
 
   /* tests on decreaseSize() */
@@ -46,4 +46,4 @@ class ShipSpec extends FunSuite with DiagrammedAssertions {
     val s1 = Ship("s1", 4, Set("a1", "a2", "a3", "a4"))
     assert(!(s1.isTakenByShip("a5")))
   }
-}*/
+}

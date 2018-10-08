@@ -1,6 +1,8 @@
 package helpers
 import scala.io.StdIn
 import game._
+import main.scala.elements.{Battle, GridOfAttack, GridOfShips}
+import main.scala.players._
 
 /** Manager the attack part of a battleship */
 object BattleHelper {

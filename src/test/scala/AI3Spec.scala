@@ -1,6 +1,10 @@
 import org.scalatest._
-import game._
+import main.scala.elements._
+import main.scala.players._
 import helpers._
+import main.scala.elements.{GridOfAttack, GridOfShips}
+import main.scala.players.AI3
+
 import scala.util.Random
 
 class AI3Spec extends FunSuite with DiagrammedAssertions {

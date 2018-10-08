@@ -2,6 +2,8 @@ package helpers
 import scala.io.StdIn
 import scala.util.Random
 import game._
+import main.scala.elements.{Battle, GridOfAttack, GridOfShips, Ship}
+import main.scala.players._
 
 /** The manager of the preparation of a battle */
 object GeneralHelper {

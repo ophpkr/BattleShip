@@ -1,9 +1,8 @@
 import org.scalatest._
-import game.GridOfAttack
-import game.Grid
 import helpers._
+import main.scala.elements.{Grid, GridOfAttack}
 
-/*class GridOfAttackSpec extends FunSuite with DiagrammedAssertions {
+class GridOfAttackSpec extends FunSuite with DiagrammedAssertions {
 
   /* test on setHit (test the updateSquare function too) */
   test("the square a5 has been changed into a hit symbol (o)") {
@@ -17,4 +16,4 @@ import helpers._
     val g2 = g1.setMiss("a5")
     assert(g2.representation.apply(4).apply(0) == "x")
   }
-}*/
+}

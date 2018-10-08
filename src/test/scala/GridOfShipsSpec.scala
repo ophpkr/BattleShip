@@ -1,8 +1,7 @@
 import org.scalatest._
-import game.GridOfShips
-import game.Grid
 import helpers._
-/*
+import main.scala.elements.{Grid, GridOfShips}
+
 class GridOfShipsSpec extends FunSuite with DiagrammedAssertions {
 
   /* test on setHit (test the updateSquare function too) */
@@ -37,4 +36,4 @@ class GridOfShipsSpec extends FunSuite with DiagrammedAssertions {
     val g2 = g1.addShips(List("c1", "c2", "c3"), g1, 0)
     assert(g2.representation.apply(0).apply(2) == "S" && g2.representation.apply(1).apply(2) == "S" && g2.representation.apply(2).apply(2) == "S")
   }
-}*/
+}

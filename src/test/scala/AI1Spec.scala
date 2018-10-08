@@ -1,8 +1,10 @@
 import org.scalatest._
-import game._
+import main.scala.elements._
+import main.scala.players._
+
 import helpers._
 import scala.util.Random
-/*
+
 class AI1Spec extends FunSuite with DiagrammedAssertions {
 
   /* test on addShip */
@@ -66,4 +68,4 @@ class AI1Spec extends FunSuite with DiagrammedAssertions {
     assert(p3.updateShips === Set(s2))
   }
 
-}*/
+}

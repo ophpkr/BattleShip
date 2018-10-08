@@ -1,8 +1,10 @@
-package game
+package main.scala.players
+
+import helpers.GridHelper
+import main.scala.elements.Ship
+
 import scala.annotation.tailrec
-import scala.io.StdIn
 import scala.util.Random
-import helpers._
 
 trait AI {
 
