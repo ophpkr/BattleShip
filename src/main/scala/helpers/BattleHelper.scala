@@ -2,7 +2,7 @@ package helpers
 import scala.io.StdIn
 import game._
 
-/** Helper for the attack part of a battleship */
+/** Manager the attack part of a battleship */
 object BattleHelper {
 
   private var _loop: Int = 0 // used for loops for AIs try
@@ -89,10 +89,11 @@ object BattleHelper {
           case AI2(_, _, _, _, _, _, _) => {
             val pai2 = playerAttacking.asInstanceOf[AI2].addPos(pos)
             pai2.copyAttackGrid(newGridOfAttackA)
-          }
+            }
           // playerAttacking.copyAttackGrid(newGridOfAttackA)
           case AI3(_, _, _, _, _, _, _, _, _) => {
-            val pai3 = playerAttacking.asInstanceOf[AI3].manageHit(pos)
+            val ai = playerAttacking.asInstanceOf[AI3].addPos(pos)
+            val pai3 = ai.asInstanceOf[AI3].manageHit(pos)
             pai3.copyAttackGrid(newGridOfAttackA)
           }
 
@@ -130,7 +131,10 @@ object BattleHelper {
         // "modifications on the attacking player
         val newGridOfAttackA = playerAttacking.attackGrid.setMiss(pos)
         val natt = playerAttacking match {
-          case AI3(_,_,_,_,_,_,_,_,_) => playerAttacking.asInstanceOf[AI3].manageMiss(pos)
+          case AI3(_,_,_,_,_,_,_,_,_) => {
+            val ai = playerAttacking.asInstanceOf[AI3].addPos(pos)
+            ai.asInstanceOf[AI3].manageMiss(pos)
+          }
           case _ => playerAttacking
         }
         val newAttPlayer = natt.copyAttackGrid(newGridOfAttackA)
@@ -203,6 +207,11 @@ object BattleHelper {
     }
   }
 
+  /** A copy of the player with every elements "updated" during the game reseted
+    *
+    * @param player the player to reset
+    * @return a new player consisting of the same elements except those that are proper to a bettlehip round
+    */
   def resetPlayer(player: Player): Player = {
     val rep = GeneralHelper.initialGrid
     val g: GridOfShips = GridOfShips("gridOfShips "+player.name, 10, _representation = rep)
@@ -212,17 +221,28 @@ object BattleHelper {
         val pnorm = player.copyGridsAndShips(g, ga, Set())
         pnorm.asInstanceOf[AI2].copySquaresHit(Set())
       }
+      case AI3(_,_,_,_,_,_,_,_,_) => {
+        val pnorm = player.copyGridsAndShips(g, ga, Set())
+        pnorm.asInstanceOf[AI3].setAlreadyHitSquares(Set()).setCurFirstSquare("").setPositionToMentalMap(GeneralHelper.initMapAI3(Map[String, String](), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")))
+      }
       case _ =>  player.copyGridsAndShips(g, ga, Set())
     }
   }
 
+  /** Manages the restart of a game (make a revange)
+    *
+    * @param game the game proposed to be restarted
+    * @return true if the boolean
+    */
   def askRestart(game: Battle): Boolean = {
+    // A human player is in the game, he chooses the restart of it or not
     if (game.player1.isInstanceOf[HumanPlayer] || game.player1.isInstanceOf[HumanPlayer]) {
       val restart = this.proposeToRestart
       restart
     }
+    // no human player, the game restart unless 100 game have already been played
     else {
-      if (this.loop <= 100) {
+      if (this.loop < 99) {
         println("loop " + this.loop)
         this.loop_
         val restart = true

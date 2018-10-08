@@ -3,6 +3,7 @@ import scala.io.StdIn
 import scala.util.Random
 import game._
 
+/** The manager of the preparation of a battle */
 object GeneralHelper {
 
   /** Initializes a grid of dots of size of 10
@@ -61,12 +62,12 @@ object GeneralHelper {
     }
   }
 
-  /**
+  /** Generates a player according to its parameters
     *
-    * @param name
-    * @param score
-    * @param level
-    * @return
+    * @param name the name of the player
+    * @param score the score of the player
+    * @param level the level of the player
+    * @return a player generates according to the given parameters
     */
   def initializePlayer(name: String, score:Int, level: Int): Player = {
     val rep = initialGrid
@@ -130,9 +131,6 @@ object GeneralHelper {
         game.copy(_player2 = pdestroyer)
       }
     }
-
-
-
   }
 
   /** Puts the carrier ship for a given player
@@ -352,12 +350,22 @@ object GeneralHelper {
     }
   }
 
+  /** Prints a speak
+    *
+    * @param speak the speak wanted to be printed
+    *              if it is at None, nothing is printed
+    */
   def printer(speak: Option[String]): Unit = {
     if(!speak.isEmpty) {
       println(speak.get)
     }
   }
 
+  /** Generates a player according to its type
+    *
+    * @param typeAI the type wanted
+    * @return a player of the given type initialized
+    */
   def preparePlayer(typeAI: String): Player = {
     val rep = initialGrid
     typeAI match {
@@ -387,12 +395,22 @@ object GeneralHelper {
     }
   }
 
+  /** Asks the type of player (AI) wanted
+    *
+    * @return the player initialized according to his type choosen
+    */
   def askType(): Player = {
-    println("coucou")
     val typeAI = StdIn.readLine().toLowerCase
     preparePlayer(typeAI)
   }
 
+  /** Inits an blank AI3's map
+    *
+    * @param map the current map where squares are already associated to "0" value
+    * @param letters the list of letters of the horizontal ladder of a battleship
+    * @param numbers the list of numbers of the vertical ladder of a battleship
+    * @return a map with all squares existing in a grid of battleship associated to the value "0"
+    */
   def initMapAI3(map: Map[String, String], letters: List[String], numbers: List[String]): Map[String, String] = {
     //println("initMapAI3")
     //println(BattleHelper.loop.toString)

@@ -1,8 +1,8 @@
 package game
+import scala.annotation.tailrec
 import scala.io.StdIn
 import scala.util.Random
-import helpers.GridHelper
-import game._
+import helpers._
 
 trait AI {
 
@@ -39,12 +39,14 @@ trait AI {
     // println(pdestroyer.shipsGrid.toString)
     pdestroyer
   }
+
   /** Puts the carrier ship for a given player
     *
     * @param player the player we put the carrier for
     * @return the player with a cruiser put
     */
-  def initCarrier(player: Player): Player = {
+  @tailrec
+  private def initCarrier(player: Player): Player = {
     val pos = randomPosition(this.random)
     val listOfPos = chooseOrientation(player, 5, pos)
     if (listOfPos.isEmpty) {
@@ -54,7 +56,7 @@ trait AI {
       val carrier = Ship("carrier", 5, listOfPos.get.toSet)
       val p = player.addShip(carrier)
       val newGridShip = p.shipsGrid.addShips(listOfPos.get, player.shipsGrid, 0)
-      return p.copyShipsGrid(newGridShip)
+      p.copyShipsGrid(newGridShip)
     }
   }
 
@@ -63,7 +65,8 @@ trait AI {
     * @param player the player we put the cruiser for
     * @return the player with a cruiser put
     */
-  def initCruiser(player: Player): Player = {
+  @tailrec
+  private def initCruiser(player: Player): Player = {
     val pos = randomPosition(this.random)
     val listOfPos = chooseOrientation(player, 4, pos)
     if (listOfPos.isEmpty) {
@@ -73,7 +76,7 @@ trait AI {
       val cruiser = Ship("cruiser", 4, listOfPos.get.toSet)
       val p = player.addShip(cruiser)
       val newGridShip = p.shipsGrid.addShips(listOfPos.get, player.shipsGrid, 0)
-      return p.copyShipsGrid(newGridShip)
+      p.copyShipsGrid(newGridShip)
     }
   }
 
@@ -82,7 +85,8 @@ trait AI {
     * @param player the player we put the battleship for
     * @return the player with a battleship put
     */
-  def initBattleShip(player: Player): Player = {
+  @tailrec
+  private def initBattleShip(player: Player): Player = {
     val pos = randomPosition(this.random)
     val listOfPos = chooseOrientation(player, 4, pos)
     if (listOfPos.isEmpty) {
@@ -92,7 +96,7 @@ trait AI {
       val battleShip = Ship("battleShip", 4, listOfPos.get.toSet)
       val p = player.addShip(battleShip)
       val newGridShip = p.shipsGrid.addShips(listOfPos.get, player.shipsGrid, 0)
-      return p.copyShipsGrid(newGridShip)
+      p.copyShipsGrid(newGridShip)
     }
   }
 
@@ -101,7 +105,8 @@ trait AI {
     * @param player the player we put the submarine for
     * @return the player with a submarine put
     */
-  def initSubmarine(player: Player): Player = {
+  @tailrec
+  private def initSubmarine(player: Player): Player = {
     val pos = randomPosition(this.random)
     val listOfPos = chooseOrientation(player, 3, pos)
     if (listOfPos.isEmpty) {
@@ -111,7 +116,7 @@ trait AI {
       val submarine = Ship("submarine", 3, listOfPos.get.toSet)
       val p = player.addShip(submarine)
       val newGridShip = p.shipsGrid.addShips(listOfPos.get, player.shipsGrid, 0)
-      return p.copyShipsGrid(newGridShip)
+      p.copyShipsGrid(newGridShip)
     }
   }
 
@@ -120,7 +125,8 @@ trait AI {
     * @param player the player we put the destroyer for
     * @return the player with a destroyer put
     */
-  def initDestroyer(player: Player): Player = {
+  @tailrec
+  private def initDestroyer(player: Player): Player = {
     val pos = randomPosition(this.random)
     val listOfPos = chooseOrientation(player, 2, pos)
     if (listOfPos.isEmpty) {
@@ -130,7 +136,7 @@ trait AI {
       val destroyer = Ship("destroyer", 2, listOfPos.get.toSet)
       val p = player.addShip(destroyer)
       val newGridShip = p.shipsGrid.addShips(listOfPos.get, player.shipsGrid, 0)
-      return p.copyShipsGrid(newGridShip)
+      p.copyShipsGrid(newGridShip)
     }
   }
 
@@ -175,7 +181,7 @@ trait AI {
     * @param pos the initial position for the ship
     * @return the list of squares corresponding to the placement wanted
     */
-  def createListOfPos(orientation: String, size: Int, pos: String): List[String] = {
+  private def createListOfPos(orientation: String, size: Int, pos: String): List[String] = {
     orientation match {
       case "h" => {
         val alphabetList = List("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p","q")

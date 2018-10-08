@@ -50,14 +50,20 @@ case class HumanPlayer(private val _name: String, private val _shipsGrid: GridOf
 
   /** Speak when a given player is initialized */
   override def creationSpeak: Option[String] = Some("The player " + this.name + " has been created")
+
   /** Speak when it's player's turn */
   override def attackingTurnSpeak: Option[String] = Some("It's " + this.name +" turn")
+
   /** Speak when it demands to enter a position */
   override def demandeEnterSquareSpeak: Option[String] = Some(this.name + " has to enter a position (ex: A1)")
+
   /** Speak when a given player has been it */
   override def hitSpeak(playerHit: Player): Option[String] = Some("You hit " + playerHit.name)
+
   /** Speak when a hit has been missed */
   override def missSpeak: Option[String] = Some("You missed the attack")
+
   /** Speak when one of a given player's ships has been sunk */
   override def sunkSpeak(player: Player): Option[String] = Some("you sunk a ship of " + player.name)
+
 }
