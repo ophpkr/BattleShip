@@ -269,14 +269,14 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
     val squareJustHitInInt = GridHelper.squareToListPositions(square)
     val currFirstSquareInInt = GridHelper.squareToListPositions(currentFirstSquareHit)
     // if a ship put on a column is supposed to be sunk (so the letter is the same)
-    if (squareJustHitInInt.apply(0) == currFirstSquareInInt.apply(0)) {
-      val line = createSetLine(Set(), List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), square.head.toString) // the set of all of the squares of the given column
-      val setShip = line.filter(x => positionToMentalMap.apply(x) == "-2") // the set of the ship supposed to be sunk
+    if (squareJustHitInInt.apply(1) == currFirstSquareInInt.apply(1)) {
+      val column = createSetColumn(Set(), List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), square.head.toString) // the set of all of the squares of the given column
+      val setShip = column.filter(x => positionToMentalMap.apply(x) == "-2") // the set of the ship supposed to be sunk
       changeAfterSunk(setShip.toList, 0)
     }
     else {
-      val column = createSetColumn(Set(), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), square.tail) // the set of all of the squares of the given line
-      val setShip = column.filter(x => positionToMentalMap.apply(x) == "-2") // the set of the ship supposed to be sunk
+      val line = createSetLine(Set(), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), square.tail) // the set of all of the squares of the given line
+      val setShip = line.filter(x => positionToMentalMap.apply(x) == "-2") // the set of the ship supposed to be sunk
       changeAfterSunk(setShip.toList, 0)
     }
   }
@@ -330,8 +330,8 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
       }
       // middle of the ship considered treatment
       else {
-        var ai = setSunk(squares.apply(pos))
-        changeAfterSunk(squares, pos + 1)
+        val ai = setSunk(squares.apply(pos))
+        ai.changeAfterSunk(squares, pos + 1)
       }
     }
   }
@@ -367,9 +367,9 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
     val squareJustHitInInt = GridHelper.squareToListPositions(square)
     val currFirstSquareInInt = GridHelper.squareToListPositions(currentFirstSquareHit)
     // squares on the same column
-    if (squareJustHitInInt.apply(0) == currFirstSquareInInt.apply(0)) {
+    if (squareJustHitInInt.apply(1) == currFirstSquareInInt.apply(1)) {
       // the just hit square is higher than the first one
-      if (squareJustHitInInt.apply(1) < currFirstSquareInInt.apply(1)) {
+      if (squareJustHitInInt.apply(0) < currFirstSquareInInt.apply(0)) {
         setHigherSquare(square, "3")
       }
       // the just hit square is lower than the first one
@@ -380,7 +380,7 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
     // squares on the same line
     else {
       // the just hit square is to the left of the first one
-      if (squareJustHitInInt.apply(0) < currFirstSquareInInt.apply(0)) {
+      if (squareJustHitInInt.apply(1) < currFirstSquareInInt.apply(1)) {
         setLeftSquare(square, "3")
       }
       // the just hit square is to the right of the first one
@@ -403,9 +403,9 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
     val currFirstSquareInInt = GridHelper.squareToListPositions(currentFirstSquareHit)
 
     // squares on the same column
-    if (squareJustHitInInt.apply(0) == currFirstSquareInInt.apply(0)) {
+    if (squareJustHitInInt.apply(1) == currFirstSquareInInt.apply(1)) {
       // the current square is lower than the hit one
-      if (squareJustHitInInt.apply(1) > currFirstSquareInInt.apply(1)) {
+      if (squareJustHitInInt.apply(0) > currFirstSquareInInt.apply(0)) {
         val nai = setHigherSquare(currentFirstSquareHit, "3")
         nai.setLowerSquare(square, "3")
       }
@@ -417,7 +417,7 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
     // squares on the same line
     else {
       // the current square is at the right of the hit one
-      if (squareJustHitInInt.apply(0) > currFirstSquareInInt.apply(0)) {
+      if (squareJustHitInInt.apply(1) > currFirstSquareInInt.apply(1)) {
         val nai = setLeftSquare(currentFirstSquareHit, "3")
         nai.setRightSquare(square, "3")
       }
@@ -439,7 +439,7 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
     val currFirstSquareInInt = GridHelper.squareToListPositions(currentFirstSquareHit)
 
     // squares on the same column
-    if (squareJustHitInInt.apply(0) == currFirstSquareInInt.apply(0)) {
+    if (squareJustHitInInt.apply(1) == currFirstSquareInInt.apply(1)) {
       // we change probability of the perpendicular squares to the hitSquare-CurrentSquare direction
       val nai = setLeftSquare(square, "1")
       nai.setRightSquare(square, "1")
@@ -462,9 +462,10 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
   private def setHigherSquare(square: String, level: String): AI3 = {
     val squareJustHitInInt = GridHelper.squareToListPositions (square)
     val currFirstSquareInInt = GridHelper.squareToListPositions (currentFirstSquareHit)
-    if (squareJustHitInInt.apply(1) - 1 < 0) this //out of the grid
+    if (squareJustHitInInt.apply(0) - 1 < 0) this //out of the grid
     else {
-      val potentialSquare = GridHelper.intToLetter(squareJustHitInInt.apply (0) ) + (squareJustHitInInt.apply(1) + 1 - 1).toString // the square given such as "a1"
+      val potentialSquare = GridHelper.intToLetter(squareJustHitInInt.apply (1) ) + (squareJustHitInInt.apply(0) - 1 + 1).toString // the square given such as "a1"
+      println("high" + potentialSquare)
       if (positionToMentalMap.apply(potentialSquare).toInt < 0) this // The square wanted has already been processed
       else {
         level match {
@@ -487,9 +488,10 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
   private def setLowerSquare(square: String, level: String): AI3 = {
     val squareJustHitInInt = GridHelper.squareToListPositions (square)
     val currFirstSquareInInt = GridHelper.squareToListPositions (currentFirstSquareHit)
-    if (squareJustHitInInt.apply(1) + 1 > 9) this //out of the grid
+    if (squareJustHitInInt.apply(0) + 1 > 9) this //out of the grid
     else {
-      val potentialSquare = GridHelper.intToLetter(squareJustHitInInt.apply (0) ) + (squareJustHitInInt.apply(1) + 1 + 1).toString // the square given such as "a1"
+      val potentialSquare = GridHelper.intToLetter(squareJustHitInInt.apply (1) ) + (squareJustHitInInt.apply(0) + 1 + 1).toString // the square given such as "a1"
+      println("bott" + potentialSquare)
       if (positionToMentalMap.apply(potentialSquare).toInt < 0) this // The square wanted has already been processed
       else {
         level match {
@@ -512,9 +514,10 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
   private def setLeftSquare(square: String, level: String): AI3 = {
     val squareJustHitInInt = GridHelper.squareToListPositions (square)
     val currFirstSquareInInt = GridHelper.squareToListPositions (currentFirstSquareHit)
-    if (squareJustHitInInt.apply(0) - 1 < 0) this //out of the grid
+    if (squareJustHitInInt.apply(1) - 1 < 0) this //out of the grid
     else {
-      val potentialSquare = GridHelper.intToLetter(squareJustHitInInt.apply(0) - 1) + (squareJustHitInInt.apply(1) + 1).toString // the square given such as "a1"
+      val potentialSquare = GridHelper.intToLetter(squareJustHitInInt.apply(1) - 1) + (squareJustHitInInt.apply(0) + 1).toString // the square given such as "a1"
+      println("left" + potentialSquare)
       if (positionToMentalMap.apply(potentialSquare).toInt > 9) this // The square wanted has already been processed
       else {
         level match {
@@ -538,9 +541,10 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
   private def setRightSquare(square: String, level: String): AI3 = {
     val squareJustHitInInt = GridHelper.squareToListPositions (square)
     val currFirstSquareInInt = GridHelper.squareToListPositions (currentFirstSquareHit)
-    if (squareJustHitInInt.apply(0) + 1 > 9) this //out of the grid
+    if (squareJustHitInInt.apply(1) + 1 > 9) this //out of the grid
     else {
-      val potentialSquare = GridHelper.intToLetter(squareJustHitInInt.apply(0) + 1) + (squareJustHitInInt.apply(1) + 1).toString // the square given such as "a1"
+      val potentialSquare = GridHelper.intToLetter(squareJustHitInInt.apply(1) + 1) + (squareJustHitInInt.apply(0) + 1).toString // the square given such as "a1"
+      println("right" + potentialSquare)
       if (positionToMentalMap.apply(potentialSquare).toInt < 0) this // The square wanted has already been processed
       else {
         level match {

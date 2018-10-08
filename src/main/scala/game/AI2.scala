@@ -101,7 +101,7 @@ case class AI2(private val _name: String, private val _shipsGrid: GridOfShips, p
     * @return an AI2 consisting of all elements of the AI2 except the already hit collection for which the square has been added
     */
   def addPos(square: String): Player = {
-    val newSquares = alreadyHitSquares+ square
+    val newSquares = alreadyHitSquares + square
     copySquaresHit(newSquares)
   }
 }

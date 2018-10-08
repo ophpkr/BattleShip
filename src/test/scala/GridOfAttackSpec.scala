@@ -3,7 +3,7 @@ import game.GridOfAttack
 import game.Grid
 import helpers._
 
-class GridOfAttackSpec extends FunSuite with DiagrammedAssertions {
+/*class GridOfAttackSpec extends FunSuite with DiagrammedAssertions {
 
   /* test on setHit (test the updateSquare function too) */
   test("the square a5 has been changed into a hit symbol (o)") {
@@ -17,4 +17,4 @@ class GridOfAttackSpec extends FunSuite with DiagrammedAssertions {
     val g2 = g1.setMiss("a5")
     assert(g2.representation.apply(4).apply(0) == "x")
   }
-}
+}*/
