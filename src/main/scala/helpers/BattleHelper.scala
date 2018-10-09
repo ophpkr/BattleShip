@@ -1,8 +1,8 @@
 package helpers
-import scala.io.StdIn
-import game._
 import main.scala.elements.{Battle, GridOfAttack, GridOfShips}
 import main.scala.players._
+
+import scala.io.StdIn
 
 /** Manager the attack part of a battleship */
 object BattleHelper {
@@ -15,10 +15,10 @@ object BattleHelper {
     * @param game the game to launch
     */
   def startBattle(game: Battle): Unit = {
-    println("startbattle")
     // start with the player who has to start attck the oponent
     val newPlayers = attackSquare(game.player1, game.player2)
     val newBattle = game.copy(_player1 = newPlayers.apply(0), _player2 = newPlayers.apply(1))
+    println("\u001b[2J")
     // case: the player 2 lost the game
     if (newBattle.player2.hasNoShip) {
       println(newBattle.player1.name + " won ! ")
@@ -55,9 +55,10 @@ object BattleHelper {
     * @return a list of two players, the first one corresponding to the attacking player "modified" and the second one to the defending player "modified"
     */
   def attackSquare(playerAttacking: Player, playerDefending: Player): List[Player] = {
-    // println("It's " + playerAttacking.name +" turn")
     GeneralHelper.printer(playerAttacking.attackingTurnSpeak)
-    // println(playerAttacking.name + " has to enter a position (ex: A1)")
+    // display grids of the player
+    println(playerAttacking.attackGrid.toString)
+    println(playerAttacking.shipsGrid.toString)
     GeneralHelper.printer(playerAttacking.demandeEnterSquareSpeak)
     // According to the kind of player, ask from console or ask hidden
     val pos = playerAttacking match {
@@ -107,7 +108,6 @@ object BattleHelper {
 
         // checks if a ship has been sunk in consequence to the hit
         if (initialNumberOfAliveShips - numberOfShipsStillAlive != 0) {
-          // println ("you sunk a ship of " + playerDefending.name)
           GeneralHelper.printer(playerAttacking.sunkSpeak(playerDefending))
           val newAttPl = playerAttacking match {
             case AI3(_,_,_,_,_,_,_,_,_) => newAttPlayer.asInstanceOf[AI3].manageSunk(pos)
@@ -123,7 +123,6 @@ object BattleHelper {
 
         // if the attacking player missed his hit
       } else {
-        // println("You missed the attack")
         GeneralHelper.printer(playerAttacking.missSpeak)
 
         // "modifications" on the defending player
@@ -141,13 +140,6 @@ object BattleHelper {
         }
         val newAttPlayer = natt.copyAttackGrid(newGridOfAttackA)
 
-        //TODO: Delete those print and add print of grids when needed
-        /*println("attack : ")
-        println(newAttPlayer.shipsGrid.toString)
-        println(newAttPlayer.attackGrid.toString)
-        println("def : ")
-        println(newDefPlayer.shipsGrid.toString)
-        println(newDefPlayer.attackGrid.toString)*/
         List(newAttPlayer, newDefPlayer)
       }
     }

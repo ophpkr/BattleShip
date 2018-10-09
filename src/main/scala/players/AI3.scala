@@ -468,7 +468,6 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
     if (squareJustHitInInt.apply(0) - 1 < 0) this //out of the grid
     else {
       val potentialSquare = GridHelper.intToLetter(squareJustHitInInt.apply (1) ) + (squareJustHitInInt.apply(0) - 1 + 1).toString // the square given such as "a1"
-      println("high" + potentialSquare)
       if (positionToMentalMap.apply(potentialSquare).toInt < 0) this // The square wanted has already been processed
       else {
         level match {
@@ -494,7 +493,6 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
     if (squareJustHitInInt.apply(0) + 1 > 9) this //out of the grid
     else {
       val potentialSquare = GridHelper.intToLetter(squareJustHitInInt.apply (1) ) + (squareJustHitInInt.apply(0) + 1 + 1).toString // the square given such as "a1"
-      println("bott" + potentialSquare)
       if (positionToMentalMap.apply(potentialSquare).toInt < 0) this // The square wanted has already been processed
       else {
         level match {
@@ -520,7 +518,6 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
     if (squareJustHitInInt.apply(1) - 1 < 0) this //out of the grid
     else {
       val potentialSquare = GridHelper.intToLetter(squareJustHitInInt.apply(1) - 1) + (squareJustHitInInt.apply(0) + 1).toString // the square given such as "a1"
-      println("left" + potentialSquare)
       if (positionToMentalMap.apply(potentialSquare).toInt > 9) this // The square wanted has already been processed
       else {
         level match {
@@ -547,7 +544,6 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
     if (squareJustHitInInt.apply(1) + 1 > 9) this //out of the grid
     else {
       val potentialSquare = GridHelper.intToLetter(squareJustHitInInt.apply(1) + 1) + (squareJustHitInInt.apply(0) + 1).toString // the square given such as "a1"
-      println("right" + potentialSquare)
       if (positionToMentalMap.apply(potentialSquare).toInt < 0) this // The square wanted has already been processed
       else {
         level match {

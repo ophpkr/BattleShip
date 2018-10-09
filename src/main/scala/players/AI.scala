@@ -19,7 +19,6 @@ trait AI {
     val letterInInt = r.nextInt(10)
     val number = r.nextInt(10) + 1
     val letter = GridHelper.intToLetter(letterInInt)
-    // println("position choisie : " + letter + number.toString)
     letter + number.toString
   }
 
@@ -30,15 +29,10 @@ trait AI {
     */
   def initShips(player: Player): Player = {
     val pcarrier = initCarrier(player)
-    // println(pcarrier.shipsGrid.toString)
     val pbatship = initBattleShip(pcarrier)
-    // println(pbatship.shipsGrid.toString)
     val pcruiser = initCruiser(pbatship)
-    // println(pcruiser.shipsGrid.toString)
     val psubmarine = initSubmarine(pcruiser)
-    // println(psubmarine.shipsGrid.toString)
     val pdestroyer = initDestroyer(psubmarine)
-    // println(pdestroyer.shipsGrid.toString)
     pdestroyer
   }
 

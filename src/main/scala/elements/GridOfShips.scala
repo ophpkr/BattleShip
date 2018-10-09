@@ -53,7 +53,7 @@ case class GridOfShips(private val _name: String, private val _size: Int, privat
     * @param square the square for which we wonder if it isn't already taken
     * @return true if the square is free and exists else false
     */
-  def isNotOccupiedSquare(square: String): Boolean = {
+  private def isNotOccupiedSquare(square: String): Boolean = {
     val pos = GridHelper.squareToListPositions(square)
     if (pos(0) >= size  || pos(1) >= size ) false
     else representation.apply(pos(0)).apply(pos(1)) == "."

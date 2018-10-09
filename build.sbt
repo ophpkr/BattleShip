@@ -1,5 +1,6 @@
-ThisBuild / scalaVersion := "2.12.6"
 ThisBuild / organization := "com.game"
+ThisBuild / scalaVersion := "2.12.6"
+
 
 lazy val battleship = (project in file("."))
   .settings(
