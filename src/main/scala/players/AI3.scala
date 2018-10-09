@@ -252,7 +252,7 @@ case class AI3(private val _name: String, private val _shipsGrid: GridOfShips, p
       case "3" => {
         val nai = setHit(square)
         nai.giveMoreProbabilityForSquaresInSameDirection(square)
-      }//TODO: be careful if the is more than 5
+      }
       case "2" => {
         val nai = setHit(square)
         val naibis = nai.giveMoreProbilityForExtremitySquares(square)
