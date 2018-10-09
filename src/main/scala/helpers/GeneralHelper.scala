@@ -417,10 +417,12 @@ object GeneralHelper {
     }
   }
 
+  /** Creates a CSV file */
   def createCSV() : Unit = {
     File("ai_proof.csv").writeAll("AI name;AI score;AI name2;AI score2\n")
   }
 
+  /** add score to CSV */
   def addScoreToCSV(player1Name: String, player1score: Int, player2Name: String, player2score: Int) : Unit = {
     File("ai_proof.csv").appendAll(player1Name + ";" + player1score + ";" + player2Name + ";" + player2score + "\n")
   }

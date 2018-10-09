@@ -22,6 +22,7 @@ object MainGame {
       BattleHelper.startBattle(newGame)
     }
     else {
+      /* proof */
       if (args(0) == "test") {
         GeneralHelper.createCSV()
         // ia1 vs ia2
