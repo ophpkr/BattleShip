@@ -1,5 +1,6 @@
-package game
-import helpers._
+package main.scala.elements
+
+import helpers.GridHelper
 
 /** A grid of ships given to a player for a battleship
   *
@@ -39,7 +40,7 @@ case class GridOfShips(private val _name: String, private val _size: Int, privat
     * @param square the square for which we have to put a hit symbol, the square has to exist
     * @return the grid with a miss symbol in the given square
     */
-  override def setMiss(square: String): GridOfShips = { // TODO: Test qd a deja tiré sur la case
+  override def setMiss(square: String): GridOfShips = {
     val pos = GridHelper.squareToListPositions(square)
     if(representation.apply(pos(0)).apply(pos(1)) != "o") {
       updateSquare(square, "x")
@@ -52,7 +53,7 @@ case class GridOfShips(private val _name: String, private val _size: Int, privat
     * @param square the square for which we wonder if it isn't already taken
     * @return true if the square is free and exists else false
     */
-  def isNotOccupiedSquare(square: String): Boolean = {
+  private def isNotOccupiedSquare(square: String): Boolean = {
     val pos = GridHelper.squareToListPositions(square)
     if (pos(0) >= size  || pos(1) >= size ) false
     else representation.apply(pos(0)).apply(pos(1)) == "."

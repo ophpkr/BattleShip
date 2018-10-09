@@ -1,7 +1,6 @@
 import org.scalatest._
-import game.GridOfAttack
-import game.Grid
 import helpers._
+import main.scala.elements.{Grid, GridOfAttack}
 
 class GridOfAttackSpec extends FunSuite with DiagrammedAssertions {
 

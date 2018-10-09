@@ -1,5 +1,6 @@
-package game
-import helpers._
+package main.scala.elements
+
+import helpers.GridHelper
 
 /** An attack grid given to a player for a battleship
   *

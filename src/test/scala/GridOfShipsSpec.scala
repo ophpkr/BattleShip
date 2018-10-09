@@ -1,7 +1,6 @@
 import org.scalatest._
-import game.GridOfShips
-import game.Grid
 import helpers._
+import main.scala.elements.{Grid, GridOfShips}
 
 class GridOfShipsSpec extends FunSuite with DiagrammedAssertions {
 

@@ -1,4 +1,6 @@
-package game
+package main.scala.players
+
+import main.scala.elements.{GridOfAttack, GridOfShips, Ship}
 
 /** A player that play the battleShip
   *

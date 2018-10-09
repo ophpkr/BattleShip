@@ -1,8 +1,12 @@
 package helpers
-import scala.io.StdIn
-import scala.util.Random
-import game._
+import main.scala.elements.{Battle, GridOfAttack, GridOfShips, Ship}
+import main.scala.players._
 
+import scala.io.StdIn
+import scala.reflect.io.File
+import scala.util.Random
+
+/** The manager of the preparation of a battle */
 object GeneralHelper {
 
   /** Initializes a grid of dots of size of 10
@@ -61,12 +65,12 @@ object GeneralHelper {
     }
   }
 
-  /**
+  /** Generates a player according to its parameters
     *
-    * @param name
-    * @param score
-    * @param level
-    * @return
+    * @param name the name of the player
+    * @param score the score of the player
+    * @param level the level of the player
+    * @return a player generates according to the given parameters
     */
   def initializePlayer(name: String, score:Int, level: Int): Player = {
     val rep = initialGrid
@@ -84,7 +88,7 @@ object GeneralHelper {
       }
       case 3 => {
         val r = Random
-        AI3(name, g, ga, Set(), 0, r)
+        AI3(name, g, ga, Set(), 0, r, initMapAI3(Map(), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")), "", Set())
       }
     }
     printer(p.creationSpeak)
@@ -100,24 +104,16 @@ object GeneralHelper {
     * @return the battle having the two players' ships put
     */
   def putShips(game: Battle, player: Player, numPlayer: String): Battle = {
-    // println("Positioning " + player.name + "'s ships")//TODO: speaker
     val pdestroyer = player match {
       case HumanPlayer(_, _, _, _, _) => {
         // creation of the five different ships for the battle
-        /*val pcarrier = putCarrier(player)
-        println(pcarrier.shipsGrid.toString)
+        val pcarrier = putCarrier(player)
         val pbatship = putBattleShip(pcarrier)
-        println(pbatship.shipsGrid.toString)
         val pcruiser = putCruiser(pbatship)
-        println(pcruiser.shipsGrid.toString)
         val psubmarine = putSubmarine(pcruiser)
-        println(psubmarine.shipsGrid.toString)
-        val pdestroyer = putDestroyer(psubmarine)
-        println(pdestroyer.shipsGrid.toString)*/
-        this.putDestroyer(player)
-        // println(pdestroyer.shipsGrid.toString)
+        putDestroyer(psubmarine)
       }
-      case AI1(_, _, _, _, _, _) | AI2(_, _, _, _, _, _, _) | AI3(_, _, _, _, _, _) => {
+      case AI1(_, _, _, _, _, _) | AI2(_, _, _, _, _, _, _) | AI3(_, _, _, _, _, _, _, _, _) => {
         player.asInstanceOf[AI].initShips(player)
       }
     }
@@ -130,9 +126,6 @@ object GeneralHelper {
         game.copy(_player2 = pdestroyer)
       }
     }
-
-
-
   }
 
   /** Puts the carrier ship for a given player
@@ -256,6 +249,7 @@ object GeneralHelper {
         val destroyer = Ship("destroyer", 2, listOfPos.get.toSet)
         val p = player.addShip(destroyer)
         val newGridShip = p.shipsGrid.addShips(listOfPos.get, player.shipsGrid, 0)
+        println("\u001b[2J")
         return p.copyShipsGrid(newGridShip)
       }
     }
@@ -290,8 +284,6 @@ object GeneralHelper {
         val listOfPos = createListOfPos("h", size, pos)
         player.shipsGrid.canOccupySquares(listOfPos) match {
           case true => {
-            println("placement ok ")
-            println(listOfPos.mkString(""))
             Some(listOfPos)
           }
           case _ => {
@@ -304,8 +296,6 @@ object GeneralHelper {
         val listOfPos = createListOfPos("v", size, pos)
         player.shipsGrid.canOccupySquares(listOfPos) match {
           case true => {
-            println("placement ok ")
-            println(listOfPos.mkString(""))
             Some(listOfPos)
           }
           case _ => {
@@ -333,13 +323,9 @@ object GeneralHelper {
       case "h" => {
         val alphabetList = List("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p","q")
         val start = alphabetList.indexOf(pos.head.toString)
-        println("index of pos est " + start.toString)
         val stop = start + size
-        println("stop is "+ stop.toString)
         val listOfletters = alphabetList.slice(start, stop)
-        println(listOfletters.mkString(""))
         val listOfPos = listOfletters.map(x => x + pos.tail)
-        println(listOfPos.mkString(""))
         listOfPos
       }
       case "v" => {
@@ -352,12 +338,22 @@ object GeneralHelper {
     }
   }
 
+  /** Prints a speak
+    *
+    * @param speak the speak wanted to be printed
+    *              if it is at None, nothing is printed
+    */
   def printer(speak: Option[String]): Unit = {
     if(!speak.isEmpty) {
       println(speak.get)
     }
   }
 
+  /** Generates a player according to its type
+    *
+    * @param typeAI the type wanted
+    * @return a player of the given type initialized
+    */
   def preparePlayer(typeAI: String): Player = {
     val rep = initialGrid
     typeAI match {
@@ -377,14 +373,60 @@ object GeneralHelper {
         val r = Random
         val g: GridOfShips = GridOfShips("gridOfShips AI hard", 10, _representation = rep)
         val ga: GridOfAttack = GridOfAttack("gridOfAttack AI hard", 10, _representation = rep)
-        AI3("AI hard", g, ga, Set(), 0, r)
+        AI3("AI hard", g, ga, Set(), 0, r, this.initMapAI3(Map[String, String](), List("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"), List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")), "", Set())
       }
-      case _ => this.askType
+      case _ => {
+        println("type not found")
+        askType
+      }
     }
   }
 
+  /** Asks the type of player (AI) wanted
+    *
+    * @return the player initialized according to his type choosen
+    */
   def askType(): Player = {
     val typeAI = StdIn.readLine().toLowerCase
     preparePlayer(typeAI)
   }
+
+  /** Inits an blank AI3's map
+    *
+    * @param map the current map where squares are already associated to "0" value
+    * @param letters the list of letters of the horizontal ladder of a battleship
+    * @param numbers the list of numbers of the vertical ladder of a battleship
+    * @return a map with all squares existing in a grid of battleship associated to the value "0"
+    */
+  def initMapAI3(map: Map[String, String], letters: List[String], numbers: List[String]): Map[String, String] = {
+    // all positions have been created
+    if (letters.isEmpty) map
+      else {
+      // the entire colomn has been created
+      if (numbers.isEmpty) {
+        val nletters = letters.drop(1)
+        val nnumbers = List("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
+        initMapAI3(map, nletters, nnumbers)
+      }
+      else {
+        // add a new key value
+        val nmap = map + (letters.apply(0).toLowerCase() + numbers.apply(0) -> "0")
+        val nnumbers = numbers.drop(1)
+        initMapAI3(nmap, letters, nnumbers)
+      }
+    }
+  }
+
+  /** Creates a CSV file */
+  def createCSV() : Unit = {
+    File("ai_proof.csv").writeAll("AI name;AI score;AI name2;AI score2\n")
+  }
+
+  /** add score to CSV */
+  def addScoreToCSV(player1Name: String, player1score: Int, player2Name: String, player2score: Int) : Unit = {
+    File("ai_proof.csv").appendAll(player1Name + ";" + player1score + ";" + player2Name + ";" + player2score + "\n")
+  }
+
+
+
 }

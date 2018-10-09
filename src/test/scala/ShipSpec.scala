@@ -1,5 +1,5 @@
+import main.scala.elements.Ship
 import org.scalatest._
-import game.Ship
 
 class ShipSpec extends FunSuite with DiagrammedAssertions {
 

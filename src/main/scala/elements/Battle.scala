@@ -1,4 +1,6 @@
-package game
+package main.scala.elements
+
+import main.scala.players.Player
 
 /** A Battle for battleShip
 *

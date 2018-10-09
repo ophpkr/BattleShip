@@ -1,5 +1,6 @@
 package helpers
 
+/** The helper for grids constructions and ladders */
 object GridHelper {
 
   /** Map of letters conversion */

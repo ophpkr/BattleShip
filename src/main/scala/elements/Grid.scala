@@ -1,6 +1,6 @@
-package game
+package main.scala.elements
 
-import helpers.GridHelper
+import scala.annotation.tailrec
 
 /** A grid for a battleShip
   *
@@ -61,7 +61,8 @@ abstract class Grid(private val _name: String, private val _size: Int, private v
     * @return the string corresponding to the concatanation of the initial string and the string of the stepth line.
     *         If the line doesn't exist in the grid, the initial string is returned
     */
-  def mainGridToString(s: String = "", step: Int = 0): String = {
+  @tailrec
+  private def mainGridToString(s: String = "", step: Int = 0): String = {
     if (step >= 10 || step < 0) s
     else {
       val l = this.representation.apply(step).mkString("")
