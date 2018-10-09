@@ -3,6 +3,7 @@ import main.scala.elements.{Battle, GridOfAttack, GridOfShips, Ship}
 import main.scala.players._
 
 import scala.io.StdIn
+import scala.reflect.io.File
 import scala.util.Random
 
 /** The manager of the preparation of a battle */
@@ -416,13 +417,13 @@ object GeneralHelper {
     }
   }
 
-  /*def createCSV() : Unit = {
+  def createCSV() : Unit = {
     File("ai_proof.csv").writeAll("AI name;AI score;AI name2;AI score2\n")
   }
 
   def addScoreToCSV(player1Name: String, player1score: Int, player2Name: String, player2score: Int) : Unit = {
     File("ai_proof.csv").appendAll(player1Name + ";" + player1score + ";" + player2Name + ";" + player2score + "\n")
-  }*/
+  }
 
 
 

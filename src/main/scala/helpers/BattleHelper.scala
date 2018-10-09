@@ -9,7 +9,7 @@ object BattleHelper {
 
   private var _loop: Int = 0 // used for loops for AIs try
   def loop = _loop
-  def loop_ = { _loop = loop + 1 }
+  def loop_(nloop: Int) = { _loop = nloop }
   /** Constitutes the main loop of the attack part of a battleShip
     *
     * @param game the game to launch
@@ -180,7 +180,14 @@ object BattleHelper {
         val game = GeneralHelper.putShips(ngame, ngame.player1, "player1")
         startBattle(game)
       }
-      case false => println("The End")
+      case false =>{
+        if (!nbattle.player1.isInstanceOf[HumanPlayer] && !nbattle.player2.isInstanceOf[HumanPlayer]){
+          GeneralHelper.addScoreToCSV(nbattle.player1.name, nbattle.player1.score, nbattle.player2.name, nbattle.player2.score)
+        }
+        else {
+          println("The End")
+        }
+      }
     }
   }
 
@@ -230,7 +237,7 @@ object BattleHelper {
     */
   def askRestart(game: Battle): Boolean = {
     // A human player is in the game, he chooses the restart of it or not
-    if (game.player1.isInstanceOf[HumanPlayer] || game.player1.isInstanceOf[HumanPlayer]) {
+    if (game.player1.isInstanceOf[HumanPlayer] || game.player2.isInstanceOf[HumanPlayer]) {
       val restart = this.proposeToRestart
       restart
     }
@@ -238,7 +245,7 @@ object BattleHelper {
     else {
       if (this.loop < 99) {
         println("loop " + this.loop)
-        this.loop_
+        loop_(loop + 1)
         val restart = true
         restart
       }
